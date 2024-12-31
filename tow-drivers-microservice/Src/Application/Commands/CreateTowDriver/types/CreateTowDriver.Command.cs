@@ -8,7 +8,7 @@
         DateOnly licenseIssueDate,
         DateOnly licenseExpirationDate,
         string medicalCertificateOwnerName,
-        int medicaCertificateAge,
+        int medicalCertificateAge,
         DateOnly medicalCertificateIssueDate,
         DateOnly medicalCertificateExpirationDate,
         int towDriverIdentificationNumber

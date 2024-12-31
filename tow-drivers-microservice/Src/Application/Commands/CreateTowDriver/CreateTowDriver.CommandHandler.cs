@@ -31,7 +31,7 @@ namespace TowDrivers.Domain
                 ),
                 new TowDriverMedicalCertificate(
                     command.medicalCertificateOwnerName,
-                    command.medicaCertificateAge,
+                    command.medicalCertificateAge,
                     command.medicalCertificateIssueDate,
                     command.medicalCertificateExpirationDate
                 ),

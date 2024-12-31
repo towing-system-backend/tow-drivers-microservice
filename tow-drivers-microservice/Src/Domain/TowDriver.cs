@@ -103,5 +103,83 @@ namespace TowDrivers.Domain
             _towDriverStatus = new TowDriverStatus(@event.TowDriverStatus);
         }
 
+        public void UpdateDriverName(TowDriverName towDriverName)
+        {
+           Apply(TowDriverNameUpdated.CreateEvent(_towDriverId, towDriverName));
+        }
+
+        private void OnTowDriverNameUpdatedEvent(TowDriverNameUpdated context)
+        {
+            _towDriverName = new TowDriverName(context.Name);
+        }
+
+        public void UpdateDriverEmail(TowDriverEmail towDriverEmail)
+        {
+            Apply(TowDriverEmailUpdated.CreateEvent(_towDriverId, towDriverEmail));
+        }
+
+        private void OnTowDriverEmailUpdatedEvent(TowDriverEmailUpdated context)
+        {
+            _towDriverEmail = new TowDriverEmail(context.Email);
+        }
+
+        public void UpdateDriverDrivingLicense(TowDriverDrivingLicense towDriverDrivingLicense)
+        {
+            Apply(TowDriverDrivingLicenseUpdated.CreateEvent(_towDriverId, towDriverDrivingLicense));
+        }
+
+        private void OnTowDriverDrivingLicenseUpdatedEvent(TowDriverDrivingLicenseUpdated context)
+        {
+            _towDriverDrivingLicense = new TowDriverDrivingLicense(
+                context.OwnerName,
+                context.IssueDate,
+                context.ExpirationDate
+            );
+        }
+
+        public void UpdateDriverMedicalCertificate(TowDriverMedicalCertificate towDriverMedicalCertificate)
+        {
+            Apply(TowDriverMedicalCertificateUpdated.CreateEvent(_towDriverId, towDriverMedicalCertificate));
+        }
+
+        private void OnTowDriverMedicalCertificateUpdatedEvent(TowDriverMedicalCertificateUpdated context)
+        {
+            _towDriverMedicalCertificate = new TowDriverMedicalCertificate(
+                context.OwnerName,
+                context.OwnerAge,
+                context.IssueDate,
+                context.ExpirationDate
+            );
+        }
+
+        public void UpdateDriverIdentificationNumber(TowDriverIdentificationNumber towDriverIdentificationNumber)
+        {
+            Apply(TowDriverIdentificationNumberUpdated.CreateEvent(_towDriverId, towDriverIdentificationNumber));
+        }
+
+        private void OnTowDriverIdentificationNumberUpdatedEvent(TowDriverIdentificationNumberUpdated context)
+        {
+            _towDriverIdentificationNumber = new TowDriverIdentificationNumber(context.IdentificationNumber);
+        }
+
+        public void UpdateDriverLocation(TowDriverLocation towDriverLocation)
+        {
+            Apply(TowDriverLocationUpdated.CreateEvent(_towDriverId, towDriverLocation));
+        }
+
+        private void OnTowDriverLocationUpdatedEvent(TowDriverLocationUpdated context)
+        {
+            _towDriverLocation = new TowDriverLocation(context.Location);
+        }
+
+        public void UpdateDriverStatus(TowDriverStatus towDriverStatus)
+        {
+            Apply(TowDriverStatusUpdated.CreateEvent(_towDriverId, towDriverStatus));
+        }
+
+        private void OnTowDriverStatusUpdatedEvent(TowDriverStatusUpdated context)
+        {
+            _towDriverStatus = new TowDriverStatus(context.Status);
+        }
     }
 }

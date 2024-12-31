@@ -6,10 +6,10 @@ namespace TowDrivers.Domain
 
     public class TowDriverMedicalCertificateUpdated(string ownerName, int ownerAge, DateOnly issueDate, DateOnly expirationDate)
     {
-        private readonly string OwnerName = ownerName;
-        private readonly int OwnerAge = ownerAge;
-        private readonly DateOnly IssueDate = issueDate;
-        private readonly DateOnly ExpirationDate = expirationDate;
+        public readonly string OwnerName = ownerName;
+        public readonly int OwnerAge = ownerAge;
+        public readonly DateOnly IssueDate = issueDate;
+        public readonly DateOnly ExpirationDate = expirationDate;
 
         public static TowDriverMedicalCertificateUpdatedEvent CreateEvent(TowDriverId publisherId, TowDriverMedicalCertificate medicalCertificate)
         {
