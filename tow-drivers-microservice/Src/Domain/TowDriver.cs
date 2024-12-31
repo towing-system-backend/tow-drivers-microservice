@@ -10,7 +10,7 @@ namespace TowDrivers.Domain
         private TowDriverDrivingLicense _towDriverDrivingLicense;
         private TowDriverMedicalCertificate _towDriverMedicalCertificate;
         private TowDriverIdentificationNumber _towDriverIdentificationNumber;
-        private TowDriverLocation _towDriverLocation;
+        private TowDriverLocation? _towDriverLocation;
         private TowDriverStatus _towDriverStatus;
 
         public TowDriver(TowDriverId towDriverId) : base(towDriverId)
@@ -26,7 +26,6 @@ namespace TowDrivers.Domain
                 _towDriverDrivingLicense == null ||
                 _towDriverMedicalCertificate == null ||
                 _towDriverIdentificationNumber == null ||
-                _towDriverLocation == null ||
                 _towDriverStatus == null)
             {
                 throw new InvalidTowDriverException();
@@ -38,7 +37,7 @@ namespace TowDrivers.Domain
         public TowDriverDrivingLicense GetTowDriverDrivingLicense() => _towDriverDrivingLicense;
         public TowDriverMedicalCertificate GetTowDriverMedicalCertificate() => _towDriverMedicalCertificate;
         public TowDriverIdentificationNumber GetDriverIdentificationNumber() => _towDriverIdentificationNumber;
-        public TowDriverLocation GetDriverLocation() => _towDriverLocation;
+        public TowDriverLocation? GetDriverLocation() => _towDriverLocation;
         public TowDriverStatus GetTowDriverStatus() => _towDriverStatus;
 
         public static TowDriver Create(
@@ -66,7 +65,42 @@ namespace TowDrivers.Domain
                     _towDriverStatus = towDriverStatus,
                 };
             }
-            var towDriver = new TowDriver(towDriverId)
+
+            var towDriver = new TowDriver(towDriverId);
+            towDriver.Apply(
+                TowDriverCreated.CreateEvent(
+                    towDriverId,
+                    towDriverName,
+                    towDriverEmail,
+                    towDriverDrivingLicense,
+                    towDriverMedicalCertificate,
+                    towDriverIdentificationNumber,
+                    towDriverLocation,
+                    towDriverStatus
+                )
+            );
+            return towDriver;
+        }
+
+        private void OnTowDriverCreatedEvent(TowDriverCreated @event)
+        {
+            _towDriverId = new TowDriverId(@event.TowDriverId);
+            _towDriverName = new TowDriverName(@event.TowDriverName);
+            _towDriverEmail = new TowDriverEmail(@event.TowDriverEmail);
+            _towDriverDrivingLicense = new TowDriverDrivingLicense(
+                @event.LicenseOwnerName,
+                @event.LicenseIssueDate,
+                @event.LicenseExpirationDate
+            );
+            _towDriverMedicalCertificate = new TowDriverMedicalCertificate(
+                @event.MedicalCertificateOwnerName,
+                @event.MedicaCertificateAge,
+                @event.MedicalCertificateIssueDate,
+                @event.MedicalCertificateExpirationDate
+            );
+            _towDriverIdentificationNumber = new TowDriverIdentificationNumber(@event.TowDriverIdentificationNumber);
+            _towDriverLocation = new TowDriverLocation(@event.TowDriverLocation!);
+            _towDriverStatus = new TowDriverStatus(@event.TowDriverStatus);
         }
 
     }

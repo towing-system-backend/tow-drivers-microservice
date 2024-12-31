@@ -4,11 +4,11 @@ namespace TowDrivers.Domain
 { 
     public class TowDriverDrivingLicenseUpdatedEvent(string publisherId, string type, TowDriverDrivingLicenseUpdated context) : DomainEvent(publisherId, type, context) { }
 
-    public class TowDriverDrivingLicenseUpdated(string ownerName, DateTime issueDate, DateTime expirationDate)
+    public class TowDriverDrivingLicenseUpdated(string ownerName, DateOnly issueDate, DateOnly expirationDate)
     {
         private readonly string OwnerName = ownerName;
-        private readonly DateTime IssueDate = issueDate;
-        private readonly DateTime ExpirationDate = expirationDate;  
+        private readonly DateOnly IssueDate = issueDate;
+        private readonly DateOnly ExpirationDate = expirationDate;  
 
         public static TowDriverDrivingLicenseUpdatedEvent CreateEvent(TowDriverId publisherId, TowDriverDrivingLicense drivingLicense)
         {

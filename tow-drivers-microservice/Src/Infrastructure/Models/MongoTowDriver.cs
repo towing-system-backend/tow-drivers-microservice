@@ -1,32 +1,38 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
+using TowDrivers.Domain;
 
 namespace TowDrivers.Infrastructure
 {
     public class MongoTowDriver
+    (
+        string towDriverId,
+        string name,
+        string email,
+        string drivingLiceseOwnerName,
+        DateOnly drivingLicenseIssueDate,
+        DateOnly drivingLicenseExpirationDate,
+        string medicalCertificateOwnerName,
+        int medicalCertificateOwnerAge,
+        DateOnly medicalCertificateIssueDate,
+        DateOnly medicalCertificateExpirationDate,
+        int identificationNumber,
+        string? location,
+        string? status
+    )
     {
         [BsonId]
-        public string TowDriverId { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public MongoTowDriverDrivingLicense DrivingLicense { get; set; }
-        public MongoTowDriverMedicalCertificate MedicalCertificate { get; set; }
-        public string IdentificationNumber { get; set; }
-        public string Location { get; set; }
-        public string Status { get; set; }
-    }
-
-    public class MongoTowDriverDrivingLicense
-    {
-        public string OwnerName { get; set; }
-        public DateTime IssueDate { get; set; }
-        public DateTime ExpirationDate { get; set; }
-    }
-
-    public class MongoTowDriverMedicalCertificate
-    {
-        public string OwnerName { get; set; }
-        public int OwnerAge { get; set; }
-        public DateTime IssueDate { get; set; }
-        public DateTime ExpirationDate { get; set; }
+        public string TowDriverId = towDriverId;
+        public string Name = name;
+        public string Email = email;
+        public string DrivingLiceseOwnerName = drivingLiceseOwnerName;
+        public DateOnly DrivingLicenseIssueDate = drivingLicenseIssueDate;
+        public DateOnly DrivingLicenseExpirationDate = drivingLicenseExpirationDate;
+        public string MedicalCertificateOwnerName = medicalCertificateOwnerName;
+        public int MedicalCertificateOwnerAge = medicalCertificateOwnerAge;
+        public DateOnly MedicalCertificateIssueDate = medicalCertificateIssueDate;
+        public DateOnly MedicalCertificateExpirationDate = medicalCertificateExpirationDate;
+        public int IdentificationNumber = identificationNumber;
+        public string? Location = location;
+        public string? Status = status;
     }
 }

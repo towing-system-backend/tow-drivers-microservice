@@ -8,7 +8,7 @@ namespace TowDrivers.Domain
 
         public TowDriverLocation(string value)
         {
-            if ( value.Length < 8 || value.Length > 20)
+            if (value == null)
             {
                 throw new InvalidTowDriverLocationException();
             }
