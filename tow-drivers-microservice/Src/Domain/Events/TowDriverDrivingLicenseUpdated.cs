@@ -6,9 +6,9 @@ namespace TowDrivers.Domain
 
     public class TowDriverDrivingLicenseUpdated(string ownerName, DateOnly issueDate, DateOnly expirationDate)
     {
-        public readonly string OwnerName = ownerName;
-        public readonly DateOnly IssueDate = issueDate;
-        public readonly DateOnly ExpirationDate = expirationDate;  
+        public readonly string LicenseOwnerName = ownerName;
+        public readonly DateOnly LicenseIssueDate = issueDate;
+        public readonly DateOnly LicenseExpirationDate = expirationDate;  
 
         public static TowDriverDrivingLicenseUpdatedEvent CreateEvent(TowDriverId publisherId, TowDriverDrivingLicense drivingLicense)
         {

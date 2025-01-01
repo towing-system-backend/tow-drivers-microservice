@@ -20,12 +20,12 @@ namespace tow_drivers_microservice.Src.Application.Commands.UpdateTowDriverStatu
         private readonly IMessageBrokerService _messageBrokerService = messageBrokerService;
         public async Task<Result<UpdateTowDriverStatusResponse>> Execute(UpdateTowDriverStatusCommand command)
         {
-            var towDriverRegistred = await _towDriverRepository.FindById(command.towDriverId);
+            var towDriverRegistred = await _towDriverRepository.FindById(command.TowDriverId);
             if (towDriverRegistred == null) Result<UpdateTowDriverResponse>.MakeError(new TowDriverNotFoundError());
             var towDriver = towDriverRegistred.Unwrap();
 
-            if(command.status != null)
-                towDriver.UpdateDriverStatus(new TowDriverStatus(command.status));
+            if(command.Status != null)
+                towDriver.UpdateDriverStatus(new TowDriverStatus(command.Status));
 
             var events = towDriver.PullEvents();
             await _towDriverRepository.Save(towDriver);

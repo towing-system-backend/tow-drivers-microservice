@@ -19,31 +19,34 @@ namespace TowDrivers.Domain
 
         public async Task<Result<UpdateTowDriverResponse>> Execute(UpdateTowDriverCommand command)
         {
-            var towDriverRegistred = await _towDriverRepository.FindById(command.towDriverId);
+            var towDriverRegistred = await _towDriverRepository.FindById(command.TowDriverId);
             if (towDriverRegistred == null) Result<UpdateTowDriverResponse>.MakeError(new TowDriverNotFoundError());
             var towDriver = towDriverRegistred.Unwrap();
 
-            if (command.towDriverName != null) towDriver.UpdateDriverName(new TowDriverName(command.towDriverName));
-            if (command.towDriverEmail != null) towDriver.UpdateDriverEmail(new TowDriverEmail(command.towDriverEmail));
-            if (command.licenseOwnerName != null && command.licenseIssueDate != null && command.licenseExpirationDate != null)
+            if (command.TowDriverName != null) towDriver.UpdateDriverName(new TowDriverName(command.TowDriverName));
+            if (command.TowDriverEmail != null) towDriver.UpdateDriverEmail(new TowDriverEmail(command.TowDriverEmail));
+            if (command.LicenseOwnerName != null && command.LicenseIssueDate != null && command.LicenseExpirationDate != null)
                 towDriver.UpdateDriverDrivingLicense(
                     new TowDriverDrivingLicense(
-                        command.licenseOwnerName,
-                        command.licenseIssueDate,
-                        command.licenseExpirationDate
+                        command.LicenseOwnerName,
+                        command.LicenseIssueDate,
+                        command.LicenseExpirationDate
                     )
                 );
-            if (command.medicalCertificateOwnerName != null && command.medicalCertificateAge != null && command.medicalCertificateIssueDate != null && command.medicalCertificateExpirationDate != null)
+            if (command.MedicalCertificateOwnerName != null && 
+                command.MedicalCertificateAge != null && 
+                command.MedicalCertificateIssueDate != null && 
+                command.MedicalCertificateExpirationDate != null)
                 towDriver.UpdateDriverMedicalCertificate(
                     new TowDriverMedicalCertificate(
-                        command.medicalCertificateOwnerName,
-                        command.medicalCertificateAge,
-                        command.medicalCertificateIssueDate,
-                        command.medicalCertificateExpirationDate
+                        command.MedicalCertificateOwnerName,
+                        command.MedicalCertificateAge,
+                        command.MedicalCertificateIssueDate,
+                        command.MedicalCertificateExpirationDate
                     )
                 );
-            if (command.towDriverIdentificationNumber != null)
-                towDriver.UpdateDriverIdentificationNumber(new TowDriverIdentificationNumber(command.towDriverIdentificationNumber));
+            if (command.TowDriverIdentificationNumber != null)
+                towDriver.UpdateDriverIdentificationNumber(new TowDriverIdentificationNumber(command.TowDriverIdentificationNumber));
 
             var events = towDriver.PullEvents();
             await _towDriverRepository.Save(towDriver);

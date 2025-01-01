@@ -6,7 +6,7 @@ namespace TowDrivers.Domain
 
     public class TowDriverEmailUpdated(string email)
     {
-        public readonly string Email = email;
+        public readonly string TowDriverEmail = email;
 
         static public TowDriverEmailUpdatedEvent CreateEvent(TowDriverId publisherId, TowDriverEmail email)
         {

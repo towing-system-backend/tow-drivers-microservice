@@ -2,7 +2,7 @@
 
 namespace TowDrivers.Infrastructure
 {
-    public class UpdateTowDriverDto
+    public record UpdateTowDriverDto
     {
         [Required]
         [StringLength(128)]

@@ -22,21 +22,21 @@ namespace TowDrivers.Domain
             var towDriver = TowDriver.Create
             (
                 new TowDriverId(id),
-                new TowDriverName(command.towDriverName),
-                new TowDriverEmail(command.towDriverEmail),
+                new TowDriverName(command.TowDriverName),
+                new TowDriverEmail(command.TowDriverEmail),
                 new TowDriverDrivingLicense(
-                    command.licenseOwnerName,
-                    command.licenseIssueDate,
-                    command.licenseExpirationDate
+                    command.LicenseOwnerName,
+                    command.LicenseIssueDate,
+                    command.LicenseExpirationDate
                 ),
                 new TowDriverMedicalCertificate(
-                    command.medicalCertificateOwnerName,
-                    command.medicalCertificateAge,
-                    command.medicalCertificateIssueDate,
-                    command.medicalCertificateExpirationDate
+                    command.MedicalCertificateOwnerName,
+                    command.MedicalCertificateAge,
+                    command.MedicalCertificateIssueDate,
+                    command.MedicalCertificateExpirationDate
                 ),
-                new TowDriverIdentificationNumber(command.towDriverIdentificationNumber),
-                new TowDriverLocation(""),
+                new TowDriverIdentificationNumber(command.TowDriverIdentificationNumber),
+                new TowDriverLocation("UnKnow"),
                 new TowDriverStatus("Inactive")
             );
 

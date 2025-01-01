@@ -6,7 +6,7 @@ namespace TowDrivers.Domain
 
     public class TowDriverStatusUpdated(string status)
     {
-        public readonly string Status = status;
+        public readonly string TowDriverStatus = status;
 
         static public TowDriverStatusUpdatedEvent CreateEvent(TowDriverId publisherId, TowDriverStatus status)
         {

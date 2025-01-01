@@ -15,7 +15,7 @@ namespace TowDrivers.Domain
         DateOnly licenseIssueDate,
         DateOnly licenseExpirationDate,
         string medicalCertificateOwnerName,
-        int medicaCertificateAge,
+        int medicalCertificateAge,
         DateOnly medicalCertificateIssueDate,
         DateOnly medicalCertificateExpirationDate,
         int towDriverIdentificationNumber,
@@ -30,7 +30,7 @@ namespace TowDrivers.Domain
         public readonly DateOnly LicenseIssueDate = licenseIssueDate;
         public readonly DateOnly LicenseExpirationDate = licenseExpirationDate;
         public readonly string MedicalCertificateOwnerName = medicalCertificateOwnerName;
-        public readonly int MedicaCertificateAge = medicaCertificateAge;
+        public readonly int MedicalCertificateAge = medicalCertificateAge;
         public readonly DateOnly MedicalCertificateIssueDate = medicalCertificateIssueDate;
         public readonly DateOnly MedicalCertificateExpirationDate = medicalCertificateExpirationDate;
         public readonly int TowDriverIdentificationNumber = towDriverIdentificationNumber;

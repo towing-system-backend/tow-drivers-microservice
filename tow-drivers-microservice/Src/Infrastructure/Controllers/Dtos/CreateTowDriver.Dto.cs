@@ -2,7 +2,7 @@
 
 namespace TowDrivers.Infrastructure
 {
-    public class CreateTowDriverDto
+    public record CreateTowDriverDto
     {
         [Required][StringLength(50)]
         public string towDriverName { get; init; }

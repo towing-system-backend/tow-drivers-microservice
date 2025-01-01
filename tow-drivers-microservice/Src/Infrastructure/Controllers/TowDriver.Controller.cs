@@ -8,6 +8,7 @@ using tow_drivers_microservice.Src.Application.Commands.UpdateTowDriverLocation.
 using tow_drivers_microservice.Src.Application.Commands.UpdateTowDriverStatus;
 using tow_drivers_microservice.Src.Application.Commands.UpdateTowDriverStatus.Types;
 using tow_drivers_microservice.Src.Infrastructure.Controllers.Dtos;
+using tow_drivers_microservice.Src.Infrastructure.Queries;
 using TowDrivers.Application;
 using TowDrivers.Domain;
 
@@ -128,6 +129,31 @@ namespace TowDrivers.Infrastructure
 
             var res = await handler.Execute(command);
 
+            return Ok(res.Unwrap());
+        }
+
+        [HttpGet("find/{Email}")]
+        public async Task<ObjectResult> FindTowDriverByEmail(string Email)
+        {
+            var query = new FindTowDriverByEmailDto(Email);
+            var handler =new FindTowDriverByEmailQuery();
+            var res = await handler.Execute(query);
+            return Ok(res.Unwrap());
+        }
+
+        [HttpGet("find/ActiveTowDriver")]
+        public async Task<ObjectResult> FindActiveTowDriver()
+        {
+            var handler = new FindActiveTowDriversQuery();
+            var res = await handler.Execute("");
+            return Ok(res.Unwrap());
+        }
+
+        [HttpGet("find/AllTowDriver")]
+        public async Task<ObjectResult> FindAllTowDriver()
+        {
+            var handler = new FindAllTowDriversQuery();
+            var res = await handler.Execute("");
             return Ok(res.Unwrap());
         }
 

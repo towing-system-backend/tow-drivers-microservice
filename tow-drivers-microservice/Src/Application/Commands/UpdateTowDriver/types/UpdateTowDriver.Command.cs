@@ -2,16 +2,16 @@
 {
     public record UpdateTowDriverCommand
     (
-        string towDriverId,
-        string towDriverName,
-        string towDriverEmail,
-        string licenseOwnerName,
-        DateOnly licenseIssueDate,
-        DateOnly licenseExpirationDate,
-        string medicalCertificateOwnerName,
-        int medicalCertificateAge,
-        DateOnly medicalCertificateIssueDate,
-        DateOnly medicalCertificateExpirationDate,
-        int towDriverIdentificationNumber
+        string TowDriverId,
+        string TowDriverName,
+        string TowDriverEmail,
+        string LicenseOwnerName,
+        DateOnly LicenseIssueDate,
+        DateOnly LicenseExpirationDate,
+        string MedicalCertificateOwnerName,
+        int MedicalCertificateAge,
+        DateOnly MedicalCertificateIssueDate,
+        DateOnly MedicalCertificateExpirationDate,
+        int TowDriverIdentificationNumber
     );
 }
