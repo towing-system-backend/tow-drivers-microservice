@@ -6,8 +6,8 @@ namespace TowDrivers.Domain
 
     public class TowDriverIdentificationNumberUpdated(int identificationNumber)
     {
-        public readonly int IdentificationNumber = identificationNumber;
-
+        public readonly int TowDriverIdentificationNumber = identificationNumber;
+    
         static public TowDriverIdentificationNumberUpdatedEvent CreateEvent(TowDriverId publisherId, TowDriverIdentificationNumber identificationNumber)
         {
             return new TowDriverIdentificationNumberUpdatedEvent(

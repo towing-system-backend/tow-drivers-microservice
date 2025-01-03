@@ -34,6 +34,11 @@ builder.Services.AddMassTransit(busConfigurator =>
     });
 });
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(5000);
+});
+
 builder.Services.AddControllers();
 
 var app = builder.Build();
@@ -43,7 +48,9 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
-app.UseHttpsRedirection();
+
+/*app.UseHttpsRedirection()*/
+;
 app.UseRouting();
 app.UseAuthorization();
 app.UseSwagger(c =>

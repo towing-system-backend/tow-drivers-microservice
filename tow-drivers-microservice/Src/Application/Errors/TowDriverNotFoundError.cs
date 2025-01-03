@@ -1,6 +1,7 @@
 ﻿namespace TowDrivers.Domain
 {
-    public class TowDriverNotFoundError
+    public class TowDriverNotFoundError : ApplicationException
     {
+        public TowDriverNotFoundError() : base("Tow driver not found."){}
     }
 }

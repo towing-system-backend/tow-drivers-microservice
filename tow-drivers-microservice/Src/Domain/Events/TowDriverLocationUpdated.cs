@@ -6,7 +6,7 @@ namespace TowDrivers.Domain
 
     public class TowDriverLocationUpdated(string location)
     {
-        public readonly string Location = location;
+        public readonly string TowDriverLocation = location;
 
         static public TowDriverLocationUpdatedEvent CreateEvent(TowDriverId publisherId, TowDriverLocation location)
         {
