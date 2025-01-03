@@ -5,10 +5,10 @@ namespace TowDrivers.Domain
     public class TowDriverDrivingLicense : IValueObject<TowDriverDrivingLicense>
     {
         private readonly string _ownerName;
-        private readonly DateTime _issueDate;
-        private readonly DateTime _expirationDate;
+        private readonly DateOnly _issueDate;
+        private readonly DateOnly _expirationDate;
 
-        public TowDriverDrivingLicense(string ownerName, DateTime issueDate, DateTime expirationDate)
+        public TowDriverDrivingLicense(string ownerName, DateOnly issueDate, DateOnly expirationDate)
         {
             if (string.IsNullOrWhiteSpace(ownerName) || ownerName.Length < 2 || ownerName.Length > 15)
             {
@@ -25,8 +25,8 @@ namespace TowDrivers.Domain
         }
 
         public string GetOwnerName() => _ownerName;
-        public DateTime GetIssueDate() => _issueDate;
-        public DateTime GetExpirationDate() => _expirationDate;
+        public DateOnly GetIssueDate() => _issueDate;
+        public DateOnly GetExpirationDate() => _expirationDate;
 
         public bool Equals(TowDriverDrivingLicense other)
         {
