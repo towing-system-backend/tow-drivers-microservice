@@ -1,6 +1,6 @@
 ﻿using Application.Core;
 
-namespace TowDrivers.Domain
+namespace TowDriver.Domain
 {
     public class TowDriverIdentificationNumber : IValueObject<TowDriverIdentificationNumber>
     {
@@ -14,6 +14,7 @@ namespace TowDrivers.Domain
             }
             _value = value;
         }
+
         public int GetValue() => _value;
         public bool Equals(TowDriverIdentificationNumber other) => _value == other._value;
     }

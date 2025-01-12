@@ -1,36 +1,33 @@
 ﻿using Application.Core;
 using MongoDB.Driver;
-using tow_drivers_microservice.Src.Infrastructure.Controllers.Dtos;
-using tow_drivers_microservice.Src.Infrastructure.Controllers.Responses;
-using TowDrivers.Domain;
-using TowDrivers.Infrastructure;
+using TowDriver.Application;
 
-namespace tow_drivers_microservice.Src.Infrastructure.Queries
+namespace TowDriver.Infrastructure
 {
-    public class FindTowDriverByEmailQuery : IService<FindTowDriverByEmailDto, FindTowDriverByEmailResonse>
+    public class FindTowDriverByEmailQuery : IService<FindTowDriverByEmailDto, FindTowDriverByEmailResponse>
     {
         private readonly IMongoCollection<MongoTowDriver> _towDriverCollection;
 
         public FindTowDriverByEmailQuery()
         {
-            MongoClient client = new MongoClient(Environment.GetEnvironmentVariable("CONNECTION_URI"));
-            IMongoDatabase database = client.GetDatabase(Environment.GetEnvironmentVariable("DATABASE_NAME"));
+            MongoClient client = new MongoClient(Environment.GetEnvironmentVariable("CONNECTION_URI_READ_MODELS"));
+            IMongoDatabase database = client.GetDatabase(Environment.GetEnvironmentVariable("DATABASE_NAME_READ_MODELS"));
             _towDriverCollection = database.GetCollection<MongoTowDriver>("tow-drivers");
         }
 
-        public async Task<Result<FindTowDriverByEmailResonse>> Execute(FindTowDriverByEmailDto query)
+        public async Task<Result<FindTowDriverByEmailResponse>> Execute(FindTowDriverByEmailDto query)
         {
             var filter = Builders<MongoTowDriver>.Filter.Eq(towDriver => towDriver.Email, query.Email);
             var res = await _towDriverCollection.Find(filter).FirstOrDefaultAsync();
 
-            if (res == null) return Result<FindTowDriverByEmailResonse>.MakeError(new TowDriverNotFoundError());
+            if (res == null) return Result<FindTowDriverByEmailResponse>.MakeError(new TowDriversNotFound());
 
-            return Result<FindTowDriverByEmailResonse>.MakeSuccess(
-                new FindTowDriverByEmailResonse(
+            return Result<FindTowDriverByEmailResponse>.MakeSuccess(
+                new FindTowDriverByEmailResponse(
                     res.TowDriverId,
                     res.Name,
                     res.Email,
-                    res.DrivingLiceseOwnerName,
+                    res.DrivingLicenseOwnerName,
                     res.DrivingLicenseIssueDate,
                     res.DrivingLicenseExpirationDate,
                     res.MedicalCertificateOwnerName,

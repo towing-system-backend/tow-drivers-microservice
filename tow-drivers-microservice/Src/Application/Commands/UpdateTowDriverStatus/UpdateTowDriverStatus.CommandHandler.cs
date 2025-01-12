@@ -1,36 +1,31 @@
 ﻿using Application.Core;
-using MongoDB.Driver;
-using tow_drivers_microservice.Src.Application.Commands.UpdateTowDriverStatus.Types;
-using TowDrivers.Application;
-using TowDrivers.Domain;
+using TowDriver.Domain;
 
-namespace tow_drivers_microservice.Src.Application.Commands.UpdateTowDriverStatus
+namespace TowDriver.Application
 {
     public class UpdateTowDriverStatusCommandHandler
     (
+        IMessageBrokerService messageBrokerService,
         IEventStore eventStore,
-        IdService<string> idService,
-        ITowDriverRepository towDriverRepository,
-        IMessageBrokerService messageBrokerService
+        ITowDriverRepository towDriverRepository
     ) : IService<UpdateTowDriverStatusCommand, UpdateTowDriverStatusResponse>
     {
         private readonly IEventStore _eventStore = eventStore;
-        private readonly IdService<string> _idService = idService;
         private readonly ITowDriverRepository _towDriverRepository = towDriverRepository;
         private readonly IMessageBrokerService _messageBrokerService = messageBrokerService;
         public async Task<Result<UpdateTowDriverStatusResponse>> Execute(UpdateTowDriverStatusCommand command)
         {
             var towDriverRegistred = await _towDriverRepository.FindById(command.TowDriverId);
-            if (towDriverRegistred == null) Result<UpdateTowDriverResponse>.MakeError(new TowDriverNotFoundError());
+            if (!towDriverRegistred.HasValue()) return Result<UpdateTowDriverStatusResponse>.MakeError(new TowDriverNotFound());
             var towDriver = towDriverRegistred.Unwrap();
 
-            if(command.Status != null)
-                towDriver.UpdateDriverStatus(new TowDriverStatus(command.Status));
+            if(command.Status != null) towDriver.UpdateDriverStatus(new TowDriverStatus(command.Status));
 
             var events = towDriver.PullEvents();
+            Console.WriteLine($"ESTOS SON LO EVENTOSSSSS::: {events[0].GetType()}");
             await _towDriverRepository.Save(towDriver);
             await _eventStore.AppendEvents(events);
-            await _messageBrokerService.Publish(events);
+            //await _messageBrokerService.Publish(events);
 
             return Result<UpdateTowDriverStatusResponse>.MakeSuccess(new UpdateTowDriverStatusResponse(towDriver.GetTowDriverId().GetValue()));
         }

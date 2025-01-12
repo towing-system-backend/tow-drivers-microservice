@@ -1,25 +1,27 @@
 ﻿using Application.Core;
-using TowDrivers.Application;
+using TowDriver.Domain;
 
-namespace TowDrivers.Domain
+namespace TowDriver.Application
 {
     public class CreateTowDriverCommandHandler
     (
-        IEventStore eventStore,
         IdService<string> idService,
-        ITowDriverRepository towDriverRepository,
-        IMessageBrokerService messageBrokerService
+        IMessageBrokerService messageBrokerService,
+        IEventStore eventStore,
+        ITowDriverRepository towDriverRepository
     ) : IService<CreateTowDriverCommand, CreateTowDriverResponse>
     {
-        
-        private readonly IEventStore _eventStore =  eventStore;
         private readonly IdService<string> _idService = idService;
-        private readonly ITowDriverRepository _towDriverRepository = towDriverRepository;
         private readonly IMessageBrokerService _messageBrokerService = messageBrokerService;
+        private readonly IEventStore _eventStore =  eventStore;
+        private readonly ITowDriverRepository _towDriverRepository = towDriverRepository;
         public async Task<Result<CreateTowDriverResponse>> Execute(CreateTowDriverCommand command)
         {
+            var towDriverRegistered = await _towDriverRepository.FindByEmail(command.TowDriverEmail);
+            if (towDriverRegistered.HasValue()) return Result<CreateTowDriverResponse>.MakeError(new TowDriverAlreadyExists());
+
             var id = _idService.GenerateId();
-            var towDriver = TowDriver.Create
+            var towDriver = Domain.TowDriver.Create
             (
                 new TowDriverId(id),
                 new TowDriverName(command.TowDriverName),
@@ -31,7 +33,7 @@ namespace TowDrivers.Domain
                 ),
                 new TowDriverMedicalCertificate(
                     command.MedicalCertificateOwnerName,
-                    command.MedicalCertificateAge,
+                    command.MedicalCertificateOwnerAge,
                     command.MedicalCertificateIssueDate,
                     command.MedicalCertificateExpirationDate
                 ),
@@ -46,8 +48,6 @@ namespace TowDrivers.Domain
             await _messageBrokerService.Publish(events);
 
             return Result<CreateTowDriverResponse>.MakeSuccess(new CreateTowDriverResponse(id));
-
         }
-
     }
 }

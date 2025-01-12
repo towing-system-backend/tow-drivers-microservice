@@ -1,132 +1,124 @@
 ﻿using Application.Core;
-using MassTransit;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Text.Json.Nodes;
-using tow_drivers_microservice.Src.Application.Commands.UpdateTowDriverLocation;
-using tow_drivers_microservice.Src.Application.Commands.UpdateTowDriverLocation.Types;
-using tow_drivers_microservice.Src.Application.Commands.UpdateTowDriverStatus;
-using tow_drivers_microservice.Src.Application.Commands.UpdateTowDriverStatus.Types;
-using tow_drivers_microservice.Src.Infrastructure.Controllers.Dtos;
-using tow_drivers_microservice.Src.Infrastructure.Queries;
-using TowDrivers.Application;
-using TowDrivers.Domain;
+using TowDriver.Application;
+using TowDriver.Domain;
 
-
-namespace TowDrivers.Infrastructure
+namespace TowDriver.Infrastructure
 {
     [ApiController]
-    [Route("api/towDriver")]
+    [Route("api/towdriver")]
     public class TowDriverController(
         IdService<string> idService,
+        Logger logger,
         IMessageBrokerService messageBrokerService,
         IEventStore eventStore,
-        ITowDriverRepository towDriverRepository
-    )
-        : ControllerBase
+        ITowDriverRepository towDriverRepository,
+        IPerformanceLogsRepository performanceLogsRepository
+    ): ControllerBase
     {
         private readonly IdService<string> _idService = idService;
+        private readonly Logger _logger = logger;
         private readonly IMessageBrokerService _messageBrokerService = messageBrokerService;
         private readonly IEventStore _eventStore = eventStore;
         private readonly ITowDriverRepository _towDriverRepository = towDriverRepository;
-
+        private readonly IPerformanceLogsRepository _performanceLogsRepository = performanceLogsRepository;
 
         [HttpPost("create")]
-        public async Task<ObjectResult> CreateTowDriver([FromBody] CreateTowDriverDto dto)
+        public async Task<ObjectResult> CreateTowDriver([FromBody] CreateTowDriverDto createTowDriverDto)
         {
             var command = new CreateTowDriverCommand(
-                dto.towDriverName,
-                dto.towDriverEmail,
-                dto.licenseOwnerName,
-                dto.licenseIssueDate,
-                dto.licenseExpirationDate,
-                dto.medicalCertificateOwnerName,
-                dto.medicalCertificateAge,
-                dto.medicalCertificateIssueDate,
-                dto.medicalCertificateExpirationDate,
-                dto.towDriverIdentificationNumber
+                createTowDriverDto.Name,
+                createTowDriverDto.Email,
+                createTowDriverDto.LicenseOwnerName,
+                createTowDriverDto.LicenseIssueDate,
+                createTowDriverDto.LicenseExpirationDate,
+                createTowDriverDto.MedicalCertificateOwnerName,
+                createTowDriverDto.MedicalCertificateAge,
+                createTowDriverDto.MedicalCertificateIssueDate,
+                createTowDriverDto.MedicalCertificateExpirationDate,
+                createTowDriverDto.IdentificationNumber
             );
 
             var handler =
-                new CreateTowDriverCommandHandler(
-                    _eventStore,
-                    _idService,
-                    _towDriverRepository,
-                    _messageBrokerService
+                new ExceptionCatcher<CreateTowDriverCommand, CreateTowDriverResponse>(
+                    new PerfomanceMonitor<CreateTowDriverCommand, CreateTowDriverResponse>(
+                        new LoggingAspect<CreateTowDriverCommand, CreateTowDriverResponse>(
+                            new CreateTowDriverCommandHandler(_idService, _messageBrokerService, _eventStore, _towDriverRepository), _logger
+                        ), _logger, _performanceLogsRepository, nameof(CreateTowDriverCommandHandler), "Write"
+                    ), ExceptionParser.Parse
                 );
-
             var res = await handler.Execute(command);
 
             return Ok(res.Unwrap());
         }
 
         [HttpPatch("update")]
-        public async Task<ObjectResult> UpdateTowDriver([FromBody] UpdateTowDriverDto dto)
+        public async Task<ObjectResult> UpdateTowDriver([FromBody] UpdateTowDriverDto udpateTowDriverDto)
         {
             var command = new UpdateTowDriverCommand(
-                dto.towDriverId,
-                dto.towDriverName,
-                dto.towDriverEmail,
-                dto.licenseOwnerName,
-                dto.licenseIssueDate,
-                dto.licenseExpirationDate,
-                dto.medicalCertificateOwnerName,
-                dto.medicalCertificateAge,
-                dto.medicalCertificateIssueDate,
-                dto.medicalCertificateExpirationDate,
-                dto.towDriverIdentificationNumber
+                udpateTowDriverDto.Id,
+                udpateTowDriverDto.Name,
+                udpateTowDriverDto.Email,
+                udpateTowDriverDto.LicenseOwnerName,
+                udpateTowDriverDto.LicenseIssueDate,
+                udpateTowDriverDto.LicenseExpirationDate,
+                udpateTowDriverDto.MedicalCertificateOwnerName,
+                udpateTowDriverDto.MedicalCertificateAge,
+                udpateTowDriverDto.MedicalCertificateIssueDate,
+                udpateTowDriverDto.MedicalCertificateExpirationDate,
+                udpateTowDriverDto.IdentificationNumber
             );
 
             var handler =
-                new UpdateTowDriverCommandHandler(
-                    _eventStore,
-                    _idService,
-                    _towDriverRepository,
-                    _messageBrokerService
+                new ExceptionCatcher<UpdateTowDriverCommand, UpdateTowDriverResponse>(
+                    new PerfomanceMonitor<UpdateTowDriverCommand, UpdateTowDriverResponse>(
+                        new LoggingAspect<UpdateTowDriverCommand, UpdateTowDriverResponse>(
+                            new UpdateTowDriverCommandHandler( _messageBrokerService, _eventStore, _towDriverRepository), _logger
+                        ), _logger, _performanceLogsRepository, nameof(UpdateTowDriverCommandHandler), "Write"
+                    ), ExceptionParser.Parse
                 );
-
             var res = await handler.Execute(command);
 
             return Ok(res.Unwrap());
         }
 
         [HttpPatch("update/location")]
-        public async Task<ObjectResult> UpdateTowDriverLocation([FromBody] UpdateTowDriverLocationDto dto)
+        public async Task<ObjectResult> UpdateTowDriverLocation([FromBody] UpdateTowDriverLocationDto updateTowDriverLocationDto)
         {
             var command = new UpdateTowDriverLocationCommand(
-                dto.towDriverId,
-                dto.towDriverLocation
+                updateTowDriverLocationDto.Id,
+                updateTowDriverLocationDto.Location
             );
 
             var handler =
-                new UpdateTowDriverLocationCommandHandler(
-                    _eventStore,
-                    _idService,
-                    _towDriverRepository,
-                    _messageBrokerService
+                new ExceptionCatcher<UpdateTowDriverLocationCommand, UpdateTowDriverLocationResponse>(
+                    new PerfomanceMonitor<UpdateTowDriverLocationCommand, UpdateTowDriverLocationResponse>(
+                        new LoggingAspect<UpdateTowDriverLocationCommand, UpdateTowDriverLocationResponse>(
+                            new UpdateTowDriverLocationCommandHandler(_messageBrokerService, _eventStore, _towDriverRepository), _logger
+                        ), _logger, _performanceLogsRepository, nameof(UpdateTowDriverLocationCommandHandler), "Write"
+                    ), ExceptionParser.Parse
                 );
-
             var res = await handler.Execute(command);
 
             return Ok(res.Unwrap());
         }
 
         [HttpPatch("update/status")]
-        public async Task<ObjectResult> UpdateTowDriverStatus([FromBody] UpdateTowDriverStatusDto dto)
+        public async Task<ObjectResult> UpdateTowDriverStatus([FromBody] UpdateTowDriverStatusDto updateTowDriverStatusDto)
         {
             var command = new UpdateTowDriverStatusCommand(
-                dto.towDriverId,
-                dto.towDriverStatus
+                updateTowDriverStatusDto.Id,
+                updateTowDriverStatusDto.Status
             );
 
             var handler =
-                new UpdateTowDriverStatusCommandHandler(
-                    _eventStore,
-                    _idService,
-                    _towDriverRepository,
-                    _messageBrokerService
-                );
-
+                new ExceptionCatcher<UpdateTowDriverStatusCommand, UpdateTowDriverStatusResponse>(
+                    new PerfomanceMonitor<UpdateTowDriverStatusCommand, UpdateTowDriverStatusResponse>(
+                        new LoggingAspect<UpdateTowDriverStatusCommand, UpdateTowDriverStatusResponse>(
+                            new UpdateTowDriverStatusCommandHandler(_messageBrokerService, _eventStore, _towDriverRepository), _logger
+                    ), _logger, _performanceLogsRepository, nameof(UpdateTowDriverStatusCommandHandler), "Write"
+                ), ExceptionParser.Parse
+            );
             var res = await handler.Execute(command);
 
             return Ok(res.Unwrap());
@@ -136,8 +128,9 @@ namespace TowDrivers.Infrastructure
         public async Task<ObjectResult> FindTowDriverByEmail(string Email)
         {
             var query = new FindTowDriverByEmailDto(Email);
-            var handler =new FindTowDriverByEmailQuery();
+            var handler = new FindTowDriverByEmailQuery();
             var res = await handler.Execute(query);
+
             return Ok(res.Unwrap());
         }
 
@@ -145,7 +138,8 @@ namespace TowDrivers.Infrastructure
         public async Task<ObjectResult> FindActiveTowDriver()
         {
             var handler = new FindActiveTowDriversQuery();
-            var res = await handler.Execute("");
+            var res = await handler.Execute();
+
             return Ok(res.Unwrap());
         }
 
@@ -153,9 +147,9 @@ namespace TowDrivers.Infrastructure
         public async Task<ObjectResult> FindAllTowDriver()
         {
             var handler = new FindAllTowDriversQuery();
-            var res = await handler.Execute("");
+            var res = await handler.Execute();
+
             return Ok(res.Unwrap());
         }
-
     }
 }

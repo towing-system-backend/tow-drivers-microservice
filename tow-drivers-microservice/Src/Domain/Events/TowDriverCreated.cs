@@ -1,10 +1,8 @@
 ﻿using Application.Core;
-using TowDrivers.Infrastructure;
 
-namespace TowDrivers.Domain 
+namespace TowDriver.Domain 
 {
-    public class TowDriverCreatedEvent(string publisherId, string type, TowDriverCreated context) 
-        : DomainEvent(publisherId, type, context) { }
+    public class TowDriverCreatedEvent(string publisherId, string type, TowDriverCreated context) : DomainEvent(publisherId, type, context) { }
 
     public class TowDriverCreated
     (
@@ -70,7 +68,5 @@ namespace TowDrivers.Domain
                 )
             );
         }
-    }
-    
-    
+    } 
 }

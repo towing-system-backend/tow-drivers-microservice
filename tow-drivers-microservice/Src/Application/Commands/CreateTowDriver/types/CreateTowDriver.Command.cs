@@ -1,4 +1,4 @@
-﻿namespace TowDrivers.Domain
+﻿namespace TowDriver.Application
 {
     public record CreateTowDriverCommand
     (
@@ -8,7 +8,7 @@
         DateOnly LicenseIssueDate,
         DateOnly LicenseExpirationDate,
         string MedicalCertificateOwnerName,
-        int MedicalCertificateAge,
+        int MedicalCertificateOwnerAge,
         DateOnly MedicalCertificateIssueDate,
         DateOnly MedicalCertificateExpirationDate,
         int TowDriverIdentificationNumber

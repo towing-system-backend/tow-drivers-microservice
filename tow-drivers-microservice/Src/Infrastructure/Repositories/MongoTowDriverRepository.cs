@@ -1,10 +1,8 @@
-﻿using Application.Core;
-using MassTransit.Transports;
-using MongoDB.Driver;
-using TowDrivers.Domain;
-using IOptional = Application.Core.Optional<TowDrivers.Domain.TowDriver>;
+﻿using MongoDB.Driver;
+using TowDriver.Domain;
+using IOptional = Application.Core.Optional<TowDriver.Domain.TowDriver>;
 
-namespace TowDrivers.Infrastructure
+namespace TowDriver.Infrastructure
 {
     public class MongoTowDriverRepository : ITowDriverRepository
     {
@@ -16,7 +14,6 @@ namespace TowDrivers.Infrastructure
             _towDriverCollection = database.GetCollection<MongoTowDriver>("tow-drivers");
         }
         
-
         public async Task<IOptional> FindByEmail(string email)
         {
             var filter = Builders<MongoTowDriver>.Filter.Eq(towDriver => towDriver.Email, email);
@@ -30,7 +27,7 @@ namespace TowDrivers.Infrastructure
                 new TowDriverName(res.Name),
                 new TowDriverEmail(res.Email),
                 new TowDriverDrivingLicense(
-                    res.DrivingLiceseOwnerName,
+                    res.DrivingLicenseOwnerName,
                     res.DrivingLicenseIssueDate,
                     res.DrivingLicenseExpirationDate
                 ),
@@ -60,7 +57,7 @@ namespace TowDrivers.Infrastructure
                 new TowDriverName(res.Name),
                 new TowDriverEmail(res.Email),
                 new TowDriverDrivingLicense(
-                    res.DrivingLiceseOwnerName,
+                    res.DrivingLicenseOwnerName,
                     res.DrivingLicenseIssueDate,
                     res.DrivingLicenseExpirationDate
                 ),
@@ -88,25 +85,21 @@ namespace TowDrivers.Infrastructure
             var filter = Builders<MongoTowDriver>.Filter
                 .Eq(driver => driver.TowDriverId, towDriver.GetTowDriverId().GetValue());
 
-
             var update = Builders<MongoTowDriver>.Update
-                .Set(driver => driver.Name, towDriver.GetDriverName().GetValue())
-                .Set(driver => driver.Email, towDriver.GetDriverEmail().GetValue())
-                .Set(driver => driver.DrivingLiceseOwnerName, towDriver.GetTowDriverDrivingLicense().GetOwnerName())
+                .Set(driver => driver.Name, towDriver.GetTowDriverName().GetValue())
+                .Set(driver => driver.Email, towDriver.GetTowDriverEmail().GetValue())
+                .Set(driver => driver.DrivingLicenseOwnerName, towDriver.GetTowDriverDrivingLicense().GetOwnerName())
                 .Set(driver => driver.DrivingLicenseIssueDate, towDriver.GetTowDriverDrivingLicense().GetIssueDate())
                 .Set(driver => driver.DrivingLicenseExpirationDate, towDriver.GetTowDriverDrivingLicense().GetExpirationDate())
                 .Set(driver => driver.MedicalCertificateOwnerName, towDriver.GetTowDriverMedicalCertificate().GetOwnerName())
                 .Set(driver => driver.MedicalCertificateOwnerAge, towDriver.GetTowDriverMedicalCertificate().GetOwnerAge())
                 .Set(driver => driver.MedicalCertificateIssueDate, towDriver.GetTowDriverMedicalCertificate().GetIssueDate())
                 .Set(driver => driver.MedicalCertificateExpirationDate, towDriver.GetTowDriverMedicalCertificate().GetExpirationDate())
-                .Set(driver => driver.IdentificationNumber, towDriver.GetDriverIdentificationNumber().GetValue())
-                .Set(driver => driver.Location, towDriver.GetDriverLocation()?.GetValue())
+                .Set(driver => driver.IdentificationNumber, towDriver.GetTowDriverIdentificationNumber().GetValue())
+                .Set(driver => driver.Location, towDriver.GetTowDriverLocation()?.GetValue())
                 .Set(driver => driver.Status, towDriver.GetTowDriverStatus()?.GetValue());
-
 
             await _towDriverCollection.UpdateOneAsync(filter, update, new UpdateOptions { IsUpsert = true });
         }
-
-
     }
 }

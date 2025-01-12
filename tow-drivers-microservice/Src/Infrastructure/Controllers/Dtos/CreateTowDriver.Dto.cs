@@ -1,39 +1,37 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TowDrivers.Infrastructure
+namespace TowDriver.Infrastructure
 {
     public record CreateTowDriverDto
-    {
+    (
         [Required][StringLength(50)]
-        public string towDriverName { get; init; }
+        string Name,
 
-        [Required][EmailAddress]
-        public string towDriverEmail { get; init; }
+        [Required][RegularExpression(@"^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$",ErrorMessage ="The Email field is not a valid e-mail address.")]
+        string Email,
 
         [Required][StringLength(50)]
-        public string licenseOwnerName { get; init; }
+        string LicenseOwnerName,
 
         [Required][DataType(DataType.Date)]
-        public DateOnly licenseIssueDate { get; init; }
+        DateOnly LicenseIssueDate,
         
         [Required][DataType(DataType.Date)]
-        public DateOnly licenseExpirationDate { get; init; }
-
+        DateOnly LicenseExpirationDate,
 
         [Required][StringLength(50)]
-        public string medicalCertificateOwnerName { get; init; }
-
+        string MedicalCertificateOwnerName,
+        
         [Required][Range(18, 100)]
-        public int medicalCertificateAge {  get; init; }
+        int MedicalCertificateAge,
 
         [Required][DataType(DataType.Date)]
-        public DateOnly medicalCertificateIssueDate { get; init; }
+        DateOnly MedicalCertificateIssueDate,
 
         [Required][DataType(DataType.Date)]
-        public DateOnly medicalCertificateExpirationDate { get; init; }
+        DateOnly MedicalCertificateExpirationDate,
 
-        [Required]
-        [Range(1000000, 99999999)]
-        public int towDriverIdentificationNumber { get; init; }
-    }
+        [Required][Range(1000000, 99999999)]
+        int IdentificationNumber
+    );
 }

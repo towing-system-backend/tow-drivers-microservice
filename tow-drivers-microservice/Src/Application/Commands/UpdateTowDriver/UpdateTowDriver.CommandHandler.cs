@@ -1,26 +1,24 @@
 ﻿using Application.Core;
-using TowDrivers.Application;
+using TowDriver.Domain;
 
-namespace TowDrivers.Domain
+namespace TowDriver.Application
 {
     public class UpdateTowDriverCommandHandler
     (
+        IMessageBrokerService messageBrokerService,
         IEventStore eventStore,
-        IdService<string> idService,
-        ITowDriverRepository towDriverRepository,
-        IMessageBrokerService messageBrokerService
+        ITowDriverRepository towDriverRepository
     )
     : IService<UpdateTowDriverCommand, UpdateTowDriverResponse>
     {
-        private readonly IEventStore _eventStore = eventStore;
-        private readonly IdService<string> _idService = idService;
-        private readonly ITowDriverRepository _towDriverRepository = towDriverRepository;
         private readonly IMessageBrokerService _messageBrokerService = messageBrokerService;
+        private readonly IEventStore _eventStore = eventStore;
+        private readonly ITowDriverRepository _towDriverRepository = towDriverRepository;
 
         public async Task<Result<UpdateTowDriverResponse>> Execute(UpdateTowDriverCommand command)
         {
             var towDriverRegistred = await _towDriverRepository.FindById(command.TowDriverId);
-            if (towDriverRegistred == null) Result<UpdateTowDriverResponse>.MakeError(new TowDriverNotFoundError());
+            if (towDriverRegistred == null) return Result<UpdateTowDriverResponse>.MakeError(new TowDriverNotFound());
             var towDriver = towDriverRegistred.Unwrap();
 
             if (command.TowDriverName != null) towDriver.UpdateDriverName(new TowDriverName(command.TowDriverName));
@@ -29,24 +27,24 @@ namespace TowDrivers.Domain
                 towDriver.UpdateDriverDrivingLicense(
                     new TowDriverDrivingLicense(
                         command.LicenseOwnerName,
-                        command.LicenseIssueDate,
-                        command.LicenseExpirationDate
+                        (DateOnly) command.LicenseIssueDate,
+                        (DateOnly) command.LicenseExpirationDate
                     )
                 );
             if (command.MedicalCertificateOwnerName != null && 
                 command.MedicalCertificateAge != null && 
                 command.MedicalCertificateIssueDate != null && 
                 command.MedicalCertificateExpirationDate != null)
-                towDriver.UpdateDriverMedicalCertificate(
-                    new TowDriverMedicalCertificate(
-                        command.MedicalCertificateOwnerName,
-                        command.MedicalCertificateAge,
-                        command.MedicalCertificateIssueDate,
-                        command.MedicalCertificateExpirationDate
-                    )
+                    towDriver.UpdateDriverMedicalCertificate(
+                        new TowDriverMedicalCertificate(
+                            command.MedicalCertificateOwnerName,
+                            (int) command.MedicalCertificateAge,
+                            (DateOnly) command.MedicalCertificateIssueDate,
+                            (DateOnly) command.MedicalCertificateExpirationDate
+                        )
                 );
             if (command.TowDriverIdentificationNumber != null)
-                towDriver.UpdateDriverIdentificationNumber(new TowDriverIdentificationNumber(command.TowDriverIdentificationNumber));
+                towDriver.UpdateDriverIdentificationNumber(new TowDriverIdentificationNumber((int) command.TowDriverIdentificationNumber));
 
             var events = towDriver.PullEvents();
             await _towDriverRepository.Save(towDriver);

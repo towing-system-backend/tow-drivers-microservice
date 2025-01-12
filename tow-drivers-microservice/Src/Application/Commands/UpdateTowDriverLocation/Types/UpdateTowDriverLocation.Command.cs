@@ -1,5 +1,4 @@
-﻿namespace tow_drivers_microservice.Src.Application.Commands.UpdateTowDriverLocation.Types
+﻿namespace TowDriver.Application
 {
     public record UpdateTowDriverLocationCommand(string TowDriverId, string Location);
-    
 }

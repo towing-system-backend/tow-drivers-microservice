@@ -1,19 +1,19 @@
-﻿namespace tow_drivers_microservice.Src.Infrastructure.Controllers.Responses
+﻿namespace TowDriver.Infrastructure
 {
     public record FindActiveTowDriversResponse
     (
-        string towDriverId,
-        string towDriverName,
-        string towDriverEmail,
-        string licenseOwnerName,
-        DateOnly licenseIssueDate,
-        DateOnly licenseExpirationDate,
-        string medicalCertificateOwnerName,
-        int medicalCertificateAge,
-        DateOnly medicalCertificateIssueDate,
-        DateOnly medicalCertificateExpirationDate,
-        int towDriverIdentificationNumber,
-        string location,
-        string status
+        string TowDriverId,
+        string TowDriverName,
+        string TowDriverEmail,
+        string LicenseOwnerName,
+        DateOnly LicenseIssueDate,
+        DateOnly LicenseExpirationDate,
+        string MedicalCertificateOwnerName,
+        int MedicalCertificateAge,
+        DateOnly MedicalCertificateIssueDate,
+        DateOnly MedicalCertificateExpirationDate,
+        int TowDriverIdentificationNumber,
+        string Location,
+        string Status
     );
 }

@@ -1,7 +1,7 @@
 ﻿using Application.Core;
 
-namespace TowDrivers.Domain
-{ 
+namespace TowDriver.Domain
+{
     public class TowDriverDrivingLicenseUpdatedEvent(string publisherId, string type, TowDriverDrivingLicenseUpdated context) : DomainEvent(publisherId, type, context) { }
 
     public class TowDriverDrivingLicenseUpdated(string ownerName, DateOnly issueDate, DateOnly expirationDate)

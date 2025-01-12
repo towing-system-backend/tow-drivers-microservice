@@ -1,4 +1,4 @@
-﻿namespace tow_drivers_microservice.Src.Application.Commands.UpdateTowDriverStatus.Types
+﻿namespace TowDriver.Application
 {
     public record UpdateTowDriverStatusResponse(string TowDriverId);
 }

@@ -1,11 +1,9 @@
 ﻿using Application.Core;
 
-namespace TowDrivers.Domain
+namespace TowDriver.Domain
 {
     public class InvalidTowDriverStatusException : DomainException
     {
-        public InvalidTowDriverStatusException() : base("Invalid Tow Driver Status.")
-        {
-        }
+        public InvalidTowDriverStatusException() : base("Invalid Tow Driver Status.") { }
     }
 }

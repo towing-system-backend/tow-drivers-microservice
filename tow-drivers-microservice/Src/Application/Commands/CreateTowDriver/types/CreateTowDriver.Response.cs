@@ -1,4 +1,4 @@
-﻿namespace TowDrivers.Application
+﻿namespace TowDriver.Application
 {
     public record CreateTowDriverResponse(string TowDriverId);
 }

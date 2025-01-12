@@ -1,34 +1,33 @@
 ﻿using Application.Core;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
-using tow_drivers_microservice.Src.Infrastructure.Controllers.Responses;
-using TowDrivers.Domain;
-using TowDrivers.Infrastructure;
+using TowDriver.Application;
 
-namespace tow_drivers_microservice.Src.Infrastructure.Queries
+namespace TowDriver.Infrastructure
 {
-    public class FindAllTowDriversQuery : IService<Object, List<FindAllTowDriversResponse>>
+    public class FindAllTowDriversQuery
     {
         private readonly IMongoCollection<MongoTowDriver> _towDriverCollection;
         public FindAllTowDriversQuery()
         {
-            MongoClient client = new MongoClient(Environment.GetEnvironmentVariable("CONNECTION_URI"));
-            IMongoDatabase database = client.GetDatabase(Environment.GetEnvironmentVariable("DATABASE_NAME"));
+            MongoClient client = new MongoClient(Environment.GetEnvironmentVariable("CONNECTION_URI_READ_MODELS"));
+            IMongoDatabase database = client.GetDatabase(Environment.GetEnvironmentVariable("DATABASE_NAME_READ_MODELS"));
             _towDriverCollection = database.GetCollection<MongoTowDriver>("tow-drivers");
         }
-        public async Task<Result<List<FindAllTowDriversResponse>>> Execute(object data)
+
+        public async Task<Result<List<FindAllTowDriversResponse>>> Execute()
         {
             var filter = Builders<MongoTowDriver>.Filter.Empty;
             var res = await _towDriverCollection.Find(filter).ToListAsync();
 
-            if (res.IsNullOrEmpty()) return Result<List<FindAllTowDriversResponse>>.MakeError(new TowDriversNotFoundError());
+            if (res.IsNullOrEmpty()) return Result<List<FindAllTowDriversResponse>>.MakeError(new TowDriversNotFound());
 
             var towDrivers = res.Select(
                 towDriver => new FindAllTowDriversResponse(
                     towDriver.TowDriverId,
                     towDriver.Name,
                     towDriver.Email,
-                    towDriver.DrivingLiceseOwnerName,
+                    towDriver.DrivingLicenseOwnerName,
                     towDriver.DrivingLicenseIssueDate,
                     towDriver.DrivingLicenseExpirationDate,
                     towDriver.MedicalCertificateOwnerName,
@@ -42,7 +41,6 @@ namespace tow_drivers_microservice.Src.Infrastructure.Queries
             ).ToList();
 
             return Result<List<FindAllTowDriversResponse>>.MakeSuccess(towDrivers);
-
         }
     }
 }

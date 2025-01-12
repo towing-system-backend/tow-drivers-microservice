@@ -1,6 +1,6 @@
 ﻿using Application.Core;
 
-namespace TowDrivers.Domain
+namespace TowDriver.Domain
 {
     public class TowDriverStatusUpdatedEvent(string publisherId, string type, TowDriverStatusUpdated context) : DomainEvent(publisherId, type, context) { }
 
