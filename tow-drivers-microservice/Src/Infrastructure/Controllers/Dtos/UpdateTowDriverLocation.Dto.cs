@@ -1,15 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace tow_drivers_microservice.Src.Infrastructure.Controllers.Dtos
+namespace TowDriver.Infrastructure
 {
     public record UpdateTowDriverLocationDto
-    {
-        [Required]
-        [StringLength(128)]
-        public string towDriverId { get; init; }
+    (
+        [Required][RegularExpression(@"^([0-9A-Fa-f]{8}[-]?[0-9A-Fa-f]{4}[-]?[0-9A-Fa-f]{4}[-]?[0-9A-Fa-f]{4}[-]?[0-9A-Fa-f]{12})$", ErrorMessage = "Id must be a 'Guid'.")]
+        string Id,
 
-        [Required]
-        [StringLength(256)]
-        public string towDriverLocation { get; init; }
-    }
+        [Required][StringLength(256)]
+        string Location
+    );
 }

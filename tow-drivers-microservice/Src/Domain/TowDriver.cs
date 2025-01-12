@@ -1,11 +1,10 @@
 ﻿using Application.Core;
 
-
-namespace TowDrivers.Domain
+namespace TowDriver.Domain
 {
     public class TowDriver : AggregateRoot<TowDriverId>
     {
-        private new TowDriverId _towDriverId;
+        private new TowDriverId Id;
         private TowDriverName _towDriverName;
         private TowDriverEmail _towDriverEmail;
         private TowDriverDrivingLicense _towDriverDrivingLicense;
@@ -16,12 +15,12 @@ namespace TowDrivers.Domain
 
         public TowDriver(TowDriverId towDriverId) : base(towDriverId)
         {
-            _towDriverId = towDriverId;
+            Id = towDriverId;
         }
         public override void ValidateState()
         {
             if (
-                _towDriverId == null ||
+                Id == null ||
                 _towDriverName == null ||
                 _towDriverEmail == null ||
                 _towDriverDrivingLicense == null ||
@@ -33,12 +32,12 @@ namespace TowDrivers.Domain
             }
         }
         public TowDriverId GetTowDriverId() => Id;
-        public TowDriverName GetDriverName() => _towDriverName;
-        public TowDriverEmail GetDriverEmail() => _towDriverEmail;
+        public TowDriverName GetTowDriverName() => _towDriverName;
+        public TowDriverEmail GetTowDriverEmail() => _towDriverEmail;
         public TowDriverDrivingLicense GetTowDriverDrivingLicense() => _towDriverDrivingLicense;
         public TowDriverMedicalCertificate GetTowDriverMedicalCertificate() => _towDriverMedicalCertificate;
-        public TowDriverIdentificationNumber GetDriverIdentificationNumber() => _towDriverIdentificationNumber;
-        public TowDriverLocation? GetDriverLocation() => _towDriverLocation;
+        public TowDriverIdentificationNumber GetTowDriverIdentificationNumber() => _towDriverIdentificationNumber;
+        public TowDriverLocation? GetTowDriverLocation() => _towDriverLocation;
         public TowDriverStatus GetTowDriverStatus() => _towDriverStatus;
 
         public static TowDriver Create(
@@ -56,7 +55,7 @@ namespace TowDrivers.Domain
             {
                 return new TowDriver(towDriverId)
                 {
-                    _towDriverId = towDriverId,
+                    Id = towDriverId,
                     _towDriverName = towDriverName,
                     _towDriverEmail = towDriverEmail,
                     _towDriverDrivingLicense = towDriverDrivingLicense,
@@ -82,10 +81,44 @@ namespace TowDrivers.Domain
             );
             return towDriver;
         }
+        public void UpdateDriverName(TowDriverName towDriverName)
+        {
+           Apply(TowDriverNameUpdated.CreateEvent(Id, towDriverName));
+        }
+        
+        public void UpdateDriverEmail(TowDriverEmail towDriverEmail)
+        {
+            Apply(TowDriverEmailUpdated.CreateEvent(Id, towDriverEmail));
+        }
+        
+        public void UpdateDriverDrivingLicense(TowDriverDrivingLicense towDriverDrivingLicense)
+        {
+            Apply(TowDriverDrivingLicenseUpdated.CreateEvent(Id, towDriverDrivingLicense));
+        }
+        
+        public void UpdateDriverMedicalCertificate(TowDriverMedicalCertificate towDriverMedicalCertificate)
+        {
+            Apply(TowDriverMedicalCertificateUpdated.CreateEvent(Id, towDriverMedicalCertificate));
+        }
+        
+        public void UpdateDriverIdentificationNumber(TowDriverIdentificationNumber towDriverIdentificationNumber)
+        {
+            Apply(TowDriverIdentificationNumberUpdated.CreateEvent(Id, towDriverIdentificationNumber));
+        }
+        
+        public void UpdateDriverLocation(TowDriverLocation towDriverLocation)
+        {
+            Apply(TowDriverLocationUpdated.CreateEvent(Id, towDriverLocation));
+        }
+        
+        public void UpdateDriverStatus(TowDriverStatus towDriverStatus)
+        {
+            Apply(TowDriverStatusUpdated.CreateEvent(Id, towDriverStatus));
+        }
 
         private void OnTowDriverCreatedEvent(TowDriverCreated context)
         {
-            _towDriverId = new TowDriverId(context.TowDriverId);
+            Id = new TowDriverId(context.TowDriverId);
             _towDriverName = new TowDriverName(context.TowDriverName);
             _towDriverEmail = new TowDriverEmail(context.TowDriverEmail);
             _towDriverDrivingLicense = new TowDriverDrivingLicense(
@@ -104,29 +137,14 @@ namespace TowDrivers.Domain
             _towDriverStatus = new TowDriverStatus(context.TowDriverStatus);
         }
 
-        public void UpdateDriverName(TowDriverName towDriverName)
-        {
-           Apply(TowDriverNameUpdated.CreateEvent(_towDriverId, towDriverName));
-        }
-
         private void OnTowDriverNameUpdatedEvent(TowDriverNameUpdated context)
         {
             _towDriverName = new TowDriverName(context.TowDriverName);
         }
 
-        public void UpdateDriverEmail(TowDriverEmail towDriverEmail)
-        {
-            Apply(TowDriverEmailUpdated.CreateEvent(_towDriverId, towDriverEmail));
-        }
-
         private void OnTowDriverEmailUpdatedEvent(TowDriverEmailUpdated context)
         {
             _towDriverEmail = new TowDriverEmail(context.TowDriverEmail);
-        }
-
-        public void UpdateDriverDrivingLicense(TowDriverDrivingLicense towDriverDrivingLicense)
-        {
-            Apply(TowDriverDrivingLicenseUpdated.CreateEvent(_towDriverId, towDriverDrivingLicense));
         }
 
         private void OnTowDriverDrivingLicenseUpdatedEvent(TowDriverDrivingLicenseUpdated context)
@@ -136,11 +154,6 @@ namespace TowDrivers.Domain
                 context.LicenseIssueDate,
                 context.LicenseExpirationDate
             );
-        }
-
-        public void UpdateDriverMedicalCertificate(TowDriverMedicalCertificate towDriverMedicalCertificate)
-        {
-            Apply(TowDriverMedicalCertificateUpdated.CreateEvent(_towDriverId, towDriverMedicalCertificate));
         }
 
         private void OnTowDriverMedicalCertificateUpdatedEvent(TowDriverMedicalCertificateUpdated context)
@@ -153,19 +166,9 @@ namespace TowDrivers.Domain
             );
         }
 
-        public void UpdateDriverIdentificationNumber(TowDriverIdentificationNumber towDriverIdentificationNumber)
-        {
-            Apply(TowDriverIdentificationNumberUpdated.CreateEvent(_towDriverId, towDriverIdentificationNumber));
-        }
-
         private void OnTowDriverIdentificationNumberUpdatedEvent(TowDriverIdentificationNumberUpdated context)
         {
             _towDriverIdentificationNumber = new TowDriverIdentificationNumber(context.TowDriverIdentificationNumber);
-        }
-
-        public void UpdateDriverLocation(TowDriverLocation towDriverLocation)
-        {
-            Apply(TowDriverLocationUpdated.CreateEvent(_towDriverId, towDriverLocation));
         }
 
         private void OnTowDriverLocationUpdatedEvent(TowDriverLocationUpdated context)
@@ -173,15 +176,9 @@ namespace TowDrivers.Domain
             _towDriverLocation = new TowDriverLocation(context.TowDriverLocation);
         }
 
-        public void UpdateDriverStatus(TowDriverStatus towDriverStatus)
-        {
-            Apply(TowDriverStatusUpdated.CreateEvent(_towDriverId, towDriverStatus));
-        }
-
         private void OnTowDriverStatusUpdatedEvent(TowDriverStatusUpdated context)
         {
             _towDriverStatus = new TowDriverStatus(context.TowDriverStatus);
         }
-
     }
 }

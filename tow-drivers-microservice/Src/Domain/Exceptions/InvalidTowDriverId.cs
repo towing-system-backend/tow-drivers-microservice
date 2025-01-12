@@ -1,6 +1,6 @@
 ﻿using Application.Core;
 
-namespace TowDrivers.Domain
+namespace TowDriver.Domain
 {
     public class InvalidTowDriverIdException : DomainException
     {

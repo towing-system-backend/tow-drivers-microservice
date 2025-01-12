@@ -1,27 +1,22 @@
 ﻿using Application.Core;
-using MongoDB.Driver;
-using tow_drivers_microservice.Src.Application.Commands.UpdateTowDriverLocation.Types;
-using TowDrivers.Application;
-using TowDrivers.Domain;
+using TowDriver.Domain;
 
-namespace tow_drivers_microservice.Src.Application.Commands.UpdateTowDriverLocation
+namespace TowDriver.Application
 {
     public class UpdateTowDriverLocationCommandHandler
     (
+        IMessageBrokerService messageBrokerService,
         IEventStore eventStore,
-        IdService<string> idService,
-        ITowDriverRepository towDriverRepository,
-        IMessageBrokerService messageBrokerService
+        ITowDriverRepository towDriverRepository
     ) : IService<UpdateTowDriverLocationCommand, UpdateTowDriverLocationResponse>
     {
         private readonly IEventStore _eventStore = eventStore;
-        private readonly IdService<string> _idService = idService;
         private readonly ITowDriverRepository _towDriverRepository = towDriverRepository;
         private readonly IMessageBrokerService _messageBrokerService = messageBrokerService;
         public async Task<Result<UpdateTowDriverLocationResponse>> Execute(UpdateTowDriverLocationCommand command)
         {
             var towDriverRegistred = await _towDriverRepository.FindById(command.TowDriverId);
-            if (towDriverRegistred == null) Result<UpdateTowDriverResponse>.MakeError(new TowDriverNotFoundError());
+            if (towDriverRegistred == null) return Result<UpdateTowDriverLocationResponse>.MakeError(new TowDriverNotFound());
             var towDriver = towDriverRegistred.Unwrap();
 
             if (command.Location != null) 

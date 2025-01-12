@@ -1,6 +1,6 @@
 ﻿using Application.Core;
 
-namespace TowDrivers.Domain
+namespace TowDriver.Domain
 {
     public class TowDriverMedicalCertificate : IValueObject<TowDriverMedicalCertificate>
     {
@@ -30,17 +30,11 @@ namespace TowDrivers.Domain
             _issueDate = issueDate;
             _expirationDate = expirationDate;
         }
+
         public string GetOwnerName() => _ownerName;
         public int GetOwnerAge() => _ownerAge;
         public DateOnly GetIssueDate() => _issueDate;
         public DateOnly GetExpirationDate() => _expirationDate;
-
-        public bool Equals(TowDriverMedicalCertificate other)
-        {
-            return _ownerName == other._ownerName &&
-                   _ownerAge == other._ownerAge &&
-                   _issueDate == other._issueDate &&
-                   _expirationDate == other._expirationDate;
-        }
+        public bool Equals(TowDriverMedicalCertificate other) => _ownerName == other._ownerName && _ownerAge == other._ownerAge &&_issueDate == other._issueDate && _expirationDate == other._expirationDate;
     }
 }
