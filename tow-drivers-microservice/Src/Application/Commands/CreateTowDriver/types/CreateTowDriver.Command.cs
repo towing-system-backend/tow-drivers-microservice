@@ -2,6 +2,8 @@
 {
     public record CreateTowDriverCommand
     (
+        string TowDriverId,
+        string SupplierCompanyId,
         string TowDriverName,
         string TowDriverEmail,
         string LicenseOwnerName,

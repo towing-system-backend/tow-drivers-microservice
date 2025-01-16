@@ -24,6 +24,7 @@ namespace TowDriver.Infrastructure
             return IOptional.Of(
             Domain.TowDriver.Create(
                 new TowDriverId(res.TowDriverId),
+                new SupplierCompanyId(res.SupplierCompanyId),
                 new TowDriverName(res.Name),
                 new TowDriverEmail(res.Email),
                 new TowDriverDrivingLicense(
@@ -54,6 +55,7 @@ namespace TowDriver.Infrastructure
             return IOptional.Of(
             Domain.TowDriver.Create(
                 new TowDriverId(res.TowDriverId),
+                new SupplierCompanyId(res.SupplierCompanyId),
                 new TowDriverName(res.Name),
                 new TowDriverEmail(res.Email),
                 new TowDriverDrivingLicense(
@@ -81,11 +83,12 @@ namespace TowDriver.Infrastructure
         }
 
         public async Task Save(Domain.TowDriver towDriver)
-        {
+        { 
             var filter = Builders<MongoTowDriver>.Filter
                 .Eq(driver => driver.TowDriverId, towDriver.GetTowDriverId().GetValue());
 
             var update = Builders<MongoTowDriver>.Update
+                .Set(driver => driver.SupplierCompanyId, towDriver.GetSupplierCompanyId().GetValue())
                 .Set(driver => driver.Name, towDriver.GetTowDriverName().GetValue())
                 .Set(driver => driver.Email, towDriver.GetTowDriverEmail().GetValue())
                 .Set(driver => driver.DrivingLicenseOwnerName, towDriver.GetTowDriverDrivingLicense().GetOwnerName())

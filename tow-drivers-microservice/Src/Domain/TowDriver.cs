@@ -5,6 +5,7 @@ namespace TowDriver.Domain
     public class TowDriver : AggregateRoot<TowDriverId>
     {
         private new TowDriverId Id;
+        private new SupplierCompanyId _supplierCompanyId;
         private TowDriverName _towDriverName;
         private TowDriverEmail _towDriverEmail;
         private TowDriverDrivingLicense _towDriverDrivingLicense;
@@ -21,6 +22,7 @@ namespace TowDriver.Domain
         {
             if (
                 Id == null ||
+                _supplierCompanyId == null ||
                 _towDriverName == null ||
                 _towDriverEmail == null ||
                 _towDriverDrivingLicense == null ||
@@ -32,6 +34,7 @@ namespace TowDriver.Domain
             }
         }
         public TowDriverId GetTowDriverId() => Id;
+        public SupplierCompanyId GetSupplierCompanyId() => _supplierCompanyId;
         public TowDriverName GetTowDriverName() => _towDriverName;
         public TowDriverEmail GetTowDriverEmail() => _towDriverEmail;
         public TowDriverDrivingLicense GetTowDriverDrivingLicense() => _towDriverDrivingLicense;
@@ -42,6 +45,7 @@ namespace TowDriver.Domain
 
         public static TowDriver Create(
             TowDriverId towDriverId,
+            SupplierCompanyId supplierCompanyId,
             TowDriverName towDriverName,
             TowDriverEmail towDriverEmail,
             TowDriverDrivingLicense towDriverDrivingLicense,
@@ -56,6 +60,7 @@ namespace TowDriver.Domain
                 return new TowDriver(towDriverId)
                 {
                     Id = towDriverId,
+                    _supplierCompanyId = supplierCompanyId,
                     _towDriverName = towDriverName,
                     _towDriverEmail = towDriverEmail,
                     _towDriverDrivingLicense = towDriverDrivingLicense,
@@ -70,6 +75,7 @@ namespace TowDriver.Domain
             towDriver.Apply(
                 TowDriverCreated.CreateEvent(
                     towDriverId,
+                    supplierCompanyId,
                     towDriverName,
                     towDriverEmail,
                     towDriverDrivingLicense,
@@ -81,6 +87,12 @@ namespace TowDriver.Domain
             );
             return towDriver;
         }
+
+        public void UpdateSupplierCompanyId(SupplierCompanyId id)
+        {
+            Apply(SupplierCompanyIdUpdated.CreateEvent(Id, id));
+        }
+
         public void UpdateDriverName(TowDriverName towDriverName)
         {
            Apply(TowDriverNameUpdated.CreateEvent(Id, towDriverName));
@@ -119,6 +131,7 @@ namespace TowDriver.Domain
         private void OnTowDriverCreatedEvent(TowDriverCreated context)
         {
             Id = new TowDriverId(context.TowDriverId);
+            _supplierCompanyId = new SupplierCompanyId(context.SupplierCompanyId);
             _towDriverName = new TowDriverName(context.TowDriverName);
             _towDriverEmail = new TowDriverEmail(context.TowDriverEmail);
             _towDriverDrivingLicense = new TowDriverDrivingLicense(

@@ -7,6 +7,7 @@ namespace TowDriver.Domain
     public class TowDriverCreated
     (
         string towDriverId,
+        string supplierCompanyId,
         string towDriverName,
         string towDriverEmail,
         string licenseOwnerName,
@@ -22,6 +23,7 @@ namespace TowDriver.Domain
     )
     {
         public readonly string TowDriverId = towDriverId;
+        public readonly string SupplierCompanyId = supplierCompanyId;
         public readonly string TowDriverName = towDriverName;
         public readonly string TowDriverEmail = towDriverEmail;
         public readonly string LicenseOwnerName = licenseOwnerName;
@@ -37,6 +39,7 @@ namespace TowDriver.Domain
 
         public static TowDriverCreatedEvent CreateEvent(
             TowDriverId towDriverId,
+            SupplierCompanyId supplierCompanyId,
             TowDriverName towDriverName,
             TowDriverEmail towDriverEmail,
             TowDriverDrivingLicense towDriverDrivingLicense,
@@ -53,6 +56,7 @@ namespace TowDriver.Domain
                 new TowDriverCreated
                 (
                     towDriverId.GetValue(),
+                    supplierCompanyId.GetValue(),
                     towDriverName.GetValue(),
                     towDriverEmail.GetValue(),
                     towDriverDrivingLicense.GetOwnerName(),

@@ -1,6 +1,4 @@
-﻿using TowDriver.Infrastructure;
-
-namespace RabbitMQ.Contracts
+﻿namespace RabbitMQ.Contracts
 {
     public interface IRabbitMQMessage { };
 
@@ -11,7 +9,18 @@ namespace RabbitMQ.Contracts
         DateTime OcurredDate
     );
 
-    public record FindAllTowDrivers() : IRabbitMQMessage;
-
-    public record FindAllTowDriversQueryResponse(List<FindAllTowDriversResponse> TowDrivers) : IRabbitMQMessage;
+    public record CreateTowDriver(
+        string Id,
+        string SupplierCompanyId,
+        string Name,
+        string Email,
+        string LicenseOwnerName,
+        DateOnly LicenseIssueDate,
+        DateOnly LicenseExpirationDate,
+        string MedicalCertificateOwnerName,
+        int MedicalCertificateAge,
+        DateOnly MedicalCertificateIssueDate,
+        DateOnly MedicalCertificateExpirationDate,
+        int IdentificationNumber
+    ) : IRabbitMQMessage;
 }

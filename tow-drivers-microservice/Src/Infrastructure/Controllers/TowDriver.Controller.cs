@@ -23,10 +23,12 @@ namespace TowDriver.Infrastructure
         private readonly ITowDriverRepository _towDriverRepository = towDriverRepository;
         private readonly IPerformanceLogsRepository _performanceLogsRepository = performanceLogsRepository;
 
-        [HttpPost("create")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<ObjectResult> CreateTowDriver([FromBody] CreateTowDriverDto createTowDriverDto)
         {
             var command = new CreateTowDriverCommand(
+                createTowDriverDto.Id,
+                createTowDriverDto.SupplierCompanyId,
                 createTowDriverDto.Name,
                 createTowDriverDto.Email,
                 createTowDriverDto.LicenseOwnerName,
@@ -57,6 +59,7 @@ namespace TowDriver.Infrastructure
         {
             var command = new UpdateTowDriverCommand(
                 udpateTowDriverDto.Id,
+                udpateTowDriverDto.SupplierCompanyId,
                 udpateTowDriverDto.Name,
                 udpateTowDriverDto.Email,
                 udpateTowDriverDto.LicenseOwnerName,
