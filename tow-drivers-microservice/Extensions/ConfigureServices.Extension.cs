@@ -15,6 +15,7 @@ namespace TowDriver.Extensions
             services.AddScoped<IdService<string>, GuidGenerator>();
             services.AddScoped<Logger, DotNetLogger>();
             services.AddScoped<IMessageBrokerService, RabbitMQService>();
+            services.AddScoped<TowDriverController>();
             services.AddSingleton<MongoEventStore>();
             services.AddSingleton<IEventStore, MongoEventStore>();
             services.AddSingleton<IPerformanceLogsRepository, MongoPerformanceLogsRespository>();
@@ -44,7 +45,7 @@ namespace TowDriver.Extensions
         {
             services.AddMassTransit(busConfigurator =>
             {
-                busConfigurator.AddConsumer<GetTowDriversListConsumer>();
+                busConfigurator.AddConsumer<CreateTowDriverConsumer>();
                 busConfigurator.SetKebabCaseEndpointNameFormatter();
                 busConfigurator.UsingRabbitMq((context, configurator) =>
                 {

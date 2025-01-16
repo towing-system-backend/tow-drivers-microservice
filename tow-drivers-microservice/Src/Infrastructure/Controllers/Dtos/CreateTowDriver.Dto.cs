@@ -2,8 +2,15 @@
 
 namespace TowDriver.Infrastructure
 {
-    public record CreateTowDriverDto
-    (
+    public interface IDto { }
+
+    public record CreateTowDriverDto(
+
+        [Required][RegularExpression(@"^([0-9A-Fa-f]{8}[-]?[0-9A-Fa-f]{4}[-]?[0-9A-Fa-f]{4}[-]?[0-9A-Fa-f]{4}[-]?[0-9A-Fa-f]{12})$", ErrorMessage = "Id must be a 'Guid'.")]
+        string Id,
+        [Required][RegularExpression(@"^([0-9A-Fa-f]{8}[-]?[0-9A-Fa-f]{4}[-]?[0-9A-Fa-f]{4}[-]?[0-9A-Fa-f]{4}[-]?[0-9A-Fa-f]{12})$", ErrorMessage = "Id must be a 'Guid'.")]
+        string SupplierCompanyId,
+
         [Required][StringLength(50)]
         string Name,
 
@@ -33,5 +40,5 @@ namespace TowDriver.Infrastructure
 
         [Required][Range(1000000, 99999999)]
         int IdentificationNumber
-    );
+    ): IDto;
 }

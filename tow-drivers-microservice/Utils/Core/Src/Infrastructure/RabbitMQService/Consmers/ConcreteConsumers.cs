@@ -1,38 +1,17 @@
-﻿using Application.Core;
-using MassTransit;
+﻿using MassTransit;
 using RabbitMQ.Contracts;
 
-public class GetTowDriversListConsumer : IConsumer<FindAllTowDrivers>
+namespace Application.Core
 {
-    private readonly IServiceProvider _serviceProvider;
-    private readonly IPublishEndpoint _publishEndpoint;
-
-    public GetTowDriversListConsumer(IServiceProvider serviceProvider, IPublishEndpoint publishEnpoint)
+    public class CreateTowDriverConsumer(IServiceProvider serviceProvider) : IConsumer<CreateTowDriver>
     {
-        _serviceProvider = serviceProvider;
-        _publishEndpoint = publishEnpoint;
-    }
-
-    public async Task Consume(ConsumeContext<FindAllTowDrivers> context)
-    {
-        Console.WriteLine($"Recibiendo este es el evento que esta llegando: {context}");
-        var message = context.Message;
-
-        if (message == null)
+        private readonly IServiceProvider _serviceProvider = serviceProvider;
+        public Task Consume(ConsumeContext<CreateTowDriver> @event)
         {
-            Console.WriteLine("Error: El mensaje es nulo");
-            return;
+            var message = @event.Message;
+            new MessageProcessor(_serviceProvider).ProcessMessage(message);
+
+            return Task.CompletedTask;
         }
-
-        Console.WriteLine($"Recibiendo mensaje en TowDriverMicroservice {message.GetType().Name}");
-        var res = new FindAllTowDriversMessageProcessor(_serviceProvider, _publishEndpoint).ProcessMessage(message);
-
-        if (res == null)
-        {
-            Console.WriteLine("Error: La respuesta del procesador de mensajes es nula");
-            return;
-        }
-
-        await context.RespondAsync(res);
     }
 }

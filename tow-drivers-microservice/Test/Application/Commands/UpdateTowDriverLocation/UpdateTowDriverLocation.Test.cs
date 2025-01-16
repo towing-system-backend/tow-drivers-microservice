@@ -55,6 +55,7 @@ namespace TowDriver.Test
 
             var towDriver = Domain.TowDriver.Create(
                new TowDriverId(command.TowDriverId),
+               new SupplierCompanyId("6ec8ef54-9bdc-4abb-888a-829ca6152524"),
                new TowDriverName("John Doe"),
                new TowDriverEmail("john.doe@example.com"),
                new TowDriverDrivingLicense(

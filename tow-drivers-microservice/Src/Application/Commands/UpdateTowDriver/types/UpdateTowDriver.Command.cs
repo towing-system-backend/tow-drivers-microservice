@@ -3,6 +3,7 @@
     public record UpdateTowDriverCommand
     (
         string TowDriverId,
+        string? SupplierCompanyId,
         string? TowDriverName,
         string? TowDriverEmail,
         string? LicenseOwnerName,

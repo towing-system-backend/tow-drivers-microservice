@@ -23,7 +23,8 @@ namespace TowDriver.Application
             var id = _idService.GenerateId();
             var towDriver = Domain.TowDriver.Create
             (
-                new TowDriverId(id),
+                new TowDriverId(command.TowDriverId),
+                new SupplierCompanyId(command.SupplierCompanyId),
                 new TowDriverName(command.TowDriverName),
                 new TowDriverEmail(command.TowDriverEmail),
                 new TowDriverDrivingLicense(

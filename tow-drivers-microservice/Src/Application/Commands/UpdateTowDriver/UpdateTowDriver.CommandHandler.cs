@@ -21,6 +21,7 @@ namespace TowDriver.Application
             if (towDriverRegistred == null) return Result<UpdateTowDriverResponse>.MakeError(new TowDriverNotFound());
             var towDriver = towDriverRegistred.Unwrap();
 
+            if (command.SupplierCompanyId != null) towDriver.UpdateSupplierCompanyId(new SupplierCompanyId(command.SupplierCompanyId));
             if (command.TowDriverName != null) towDriver.UpdateDriverName(new TowDriverName(command.TowDriverName));
             if (command.TowDriverEmail != null) towDriver.UpdateDriverEmail(new TowDriverEmail(command.TowDriverEmail));
             if (command.LicenseOwnerName != null && command.LicenseIssueDate != null && command.LicenseExpirationDate != null)

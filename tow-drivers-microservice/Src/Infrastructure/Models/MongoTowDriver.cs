@@ -5,6 +5,7 @@ namespace TowDriver.Infrastructure
     public class MongoTowDriver
     (
         string towDriverId,
+        string supplierCompanyId,
         string name,
         string email,
         string drivingLicenseOwnerName,
@@ -21,6 +22,7 @@ namespace TowDriver.Infrastructure
     {
         [BsonId]
         public string TowDriverId = towDriverId;
+        public string SupplierCompanyId = supplierCompanyId;
         public string Name = name;
         public string Email = email;
         public string DrivingLicenseOwnerName = drivingLicenseOwnerName;
