@@ -13,6 +13,7 @@
         int? MedicalCertificateAge,
         DateOnly? MedicalCertificateIssueDate,
         DateOnly? MedicalCertificateExpirationDate,
-        int? TowDriverIdentificationNumber
+        int? TowDriverIdentificationNumber,
+        string TowDriverTowAssigned
     );
 }

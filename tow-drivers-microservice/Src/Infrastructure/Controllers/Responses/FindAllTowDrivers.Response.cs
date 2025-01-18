@@ -14,6 +14,7 @@
         DateOnly MedicalCertificateExpirationDate,
         int TowDriverIdentificationNumber,
         string Location,
-        string Status
+        string Status,
+        string TowAssigned
     );
 }

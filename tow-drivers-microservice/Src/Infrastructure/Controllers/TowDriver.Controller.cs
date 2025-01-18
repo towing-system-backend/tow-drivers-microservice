@@ -1,4 +1,5 @@
 ﻿using Application.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TowDriver.Application;
 using TowDriver.Domain;
@@ -23,7 +24,7 @@ namespace TowDriver.Infrastructure
         private readonly ITowDriverRepository _towDriverRepository = towDriverRepository;
         private readonly IPerformanceLogsRepository _performanceLogsRepository = performanceLogsRepository;
 
-        [ApiExplorerSettings(IgnoreApi = true)]
+        [ApiExplorerSettings(IgnoreApi = false)]
         public async Task<ObjectResult> CreateTowDriver([FromBody] CreateTowDriverDto createTowDriverDto)
         {
             var command = new CreateTowDriverCommand(
@@ -55,21 +56,24 @@ namespace TowDriver.Infrastructure
         }
 
         [HttpPatch("update")]
-        public async Task<ObjectResult> UpdateTowDriver([FromBody] UpdateTowDriverDto udpateTowDriverDto)
+        [Authorize(Roles = "Admin, TowDriver")]
+        public async Task<ObjectResult> UpdateTowDriver([FromBody] UpdateTowDriverDto updateTowDriverDto)
         {
             var command = new UpdateTowDriverCommand(
-                udpateTowDriverDto.Id,
-                udpateTowDriverDto.SupplierCompanyId,
-                udpateTowDriverDto.Name,
-                udpateTowDriverDto.Email,
-                udpateTowDriverDto.LicenseOwnerName,
-                udpateTowDriverDto.LicenseIssueDate,
-                udpateTowDriverDto.LicenseExpirationDate,
-                udpateTowDriverDto.MedicalCertificateOwnerName,
-                udpateTowDriverDto.MedicalCertificateAge,
-                udpateTowDriverDto.MedicalCertificateIssueDate,
-                udpateTowDriverDto.MedicalCertificateExpirationDate,
-                udpateTowDriverDto.IdentificationNumber
+                updateTowDriverDto.Id,
+                updateTowDriverDto.SupplierCompanyId,
+                updateTowDriverDto.Name,
+                updateTowDriverDto.Email,
+                updateTowDriverDto.LicenseOwnerName,
+                updateTowDriverDto.LicenseIssueDate,
+                updateTowDriverDto.LicenseExpirationDate,
+                updateTowDriverDto.MedicalCertificateOwnerName,
+                updateTowDriverDto.MedicalCertificateAge,
+                updateTowDriverDto.MedicalCertificateIssueDate,
+                updateTowDriverDto.MedicalCertificateExpirationDate,
+                updateTowDriverDto.IdentificationNumber,
+                updateTowDriverDto.TowAssigned
+
             );
 
             var handler =
@@ -86,6 +90,7 @@ namespace TowDriver.Infrastructure
         }
 
         [HttpPatch("update/location")]
+        [Authorize(Roles = "Admin, TowDriver")]
         public async Task<ObjectResult> UpdateTowDriverLocation([FromBody] UpdateTowDriverLocationDto updateTowDriverLocationDto)
         {
             var command = new UpdateTowDriverLocationCommand(
@@ -107,6 +112,7 @@ namespace TowDriver.Infrastructure
         }
 
         [HttpPatch("update/status")]
+        [Authorize(Roles = "Admin, TowDriver")]
         public async Task<ObjectResult> UpdateTowDriverStatus([FromBody] UpdateTowDriverStatusDto updateTowDriverStatusDto)
         {
             var command = new UpdateTowDriverStatusCommand(
@@ -128,6 +134,7 @@ namespace TowDriver.Infrastructure
         }
 
         [HttpGet("find/{Email}")]
+        [Authorize(Roles = "Admin, TowDriver")]
         public async Task<ObjectResult> FindTowDriverByEmail(string Email)
         {
             var query = new FindTowDriverByEmailDto(Email);
@@ -138,6 +145,7 @@ namespace TowDriver.Infrastructure
         }
 
         [HttpGet("find/ActiveTowDriver")]
+        [Authorize(Roles = "Admin")]
         public async Task<ObjectResult> FindActiveTowDriver()
         {
             var handler = new FindActiveTowDriversQuery();
@@ -146,11 +154,23 @@ namespace TowDriver.Infrastructure
             return Ok(res.Unwrap());
         }
 
-        [HttpGet("find/AllTowDriver")]
+        [HttpGet("find/alltowdriver")]
+        [Authorize(Roles = "Admin")]
         public async Task<ObjectResult> FindAllTowDriver()
         {
             var handler = new FindAllTowDriversQuery();
             var res = await handler.Execute();
+
+            return Ok(res.Unwrap());
+        }
+        
+        [HttpGet("find/id/{Id}")]
+        [Authorize(Roles = "Admin, TowDriver")]
+        public async Task<ObjectResult> FindTowDriverById(string Id)
+        {
+            var query = new FindTowDriverByIdDto(Id);
+            var handler = new  FindTowDriverByIdQuery();
+            var res = await handler.Execute(query);
 
             return Ok(res.Unwrap());
         }

@@ -71,7 +71,8 @@ namespace TowDriver.Test
                ),
                new TowDriverIdentificationNumber(24451458),
                new TowDriverLocation("Unknown"),
-               new TowDriverStatus("Inactive")
+               new TowDriverStatus("Inactive"),
+               new TowDriverTowAssigned("Not Assigned")
            );
 
             _towDriverRepositoryMock.Setup(repo => repo.FindById(command.TowDriverId))

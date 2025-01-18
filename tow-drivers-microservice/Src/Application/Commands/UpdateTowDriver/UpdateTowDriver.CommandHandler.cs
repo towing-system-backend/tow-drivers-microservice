@@ -46,6 +46,8 @@ namespace TowDriver.Application
                 );
             if (command.TowDriverIdentificationNumber != null)
                 towDriver.UpdateDriverIdentificationNumber(new TowDriverIdentificationNumber((int) command.TowDriverIdentificationNumber));
+            if(command.TowDriverTowAssigned != null)
+                towDriver.UpdateDriverTowAssigned(new TowDriverTowAssigned(command.TowDriverTowAssigned));
 
             var events = towDriver.PullEvents();
             await _towDriverRepository.Save(towDriver);

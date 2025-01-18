@@ -11,12 +11,12 @@ namespace TowDriver.Domain
 
         public TowDriverMedicalCertificate(string ownerName, int ownerAge, DateOnly issueDate, DateOnly expirationDate)
         {
-            if (string.IsNullOrWhiteSpace(ownerName) || ownerName.Length < 2 || ownerName.Length > 15)
+            if (string.IsNullOrWhiteSpace(ownerName) || ownerName.Length < 2 || ownerName.Length > 64)
             {
                 throw new InvalidTowDriverNameException();
             }
 
-            if (ownerAge <= 15)
+            if (ownerAge <= 18)
             {
                 throw new InvalidTowDriverOwnerAgeException();
             }

@@ -1,6 +1,6 @@
 ﻿namespace TowDriver.Infrastructure
 {
-    public record FindTowDriverByEmailResponse 
+    public record FindTowDriverByIdResponse 
     (
         string TowDriverId,
         string TowDriverName,

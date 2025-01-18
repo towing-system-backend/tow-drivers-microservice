@@ -22,10 +22,10 @@ namespace TowDriver.Application
             if(command.Status != null) towDriver.UpdateDriverStatus(new TowDriverStatus(command.Status));
 
             var events = towDriver.PullEvents();
-            Console.WriteLine($"ESTOS SON LO EVENTOSSSSS::: {events[0].GetType()}");
             await _towDriverRepository.Save(towDriver);
+            Console.WriteLine(towDriver.GetTowDriverStatus().GetValue());
             await _eventStore.AppendEvents(events);
-            //await _messageBrokerService.Publish(events);
+            await _messageBrokerService.Publish(events);
 
             return Result<UpdateTowDriverStatusResponse>.MakeSuccess(new UpdateTowDriverStatusResponse(towDriver.GetTowDriverId().GetValue()));
         }

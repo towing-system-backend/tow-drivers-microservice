@@ -40,7 +40,8 @@ namespace TowDriver.Application
                 ),
                 new TowDriverIdentificationNumber(command.TowDriverIdentificationNumber),
                 new TowDriverLocation("UnKnow"),
-                new TowDriverStatus("Inactive")
+                new TowDriverStatus("Inactive"),
+                new TowDriverTowAssigned("Not assigned")
             );
 
             var events = towDriver.PullEvents();

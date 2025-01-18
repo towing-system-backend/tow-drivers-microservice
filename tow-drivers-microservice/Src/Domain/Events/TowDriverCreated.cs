@@ -19,7 +19,8 @@ namespace TowDriver.Domain
         DateOnly medicalCertificateExpirationDate,
         int towDriverIdentificationNumber,
         string? towDriverLocation,
-        string? towDriverStatus
+        string? towDriverStatus,
+        string  towDriverTowAssigned
     )
     {
         public readonly string TowDriverId = towDriverId;
@@ -36,6 +37,7 @@ namespace TowDriver.Domain
         public readonly int TowDriverIdentificationNumber = towDriverIdentificationNumber;
         public readonly string? TowDriverLocation = towDriverLocation;
         public readonly string TowDriverStatus = "Inactive";
+        public readonly string TowDriverTowAssigned = towDriverTowAssigned;
 
         public static TowDriverCreatedEvent CreateEvent(
             TowDriverId towDriverId,
@@ -46,7 +48,8 @@ namespace TowDriver.Domain
             TowDriverMedicalCertificate towDriverMedicalCertificate,
             TowDriverIdentificationNumber towDriverIdentificationNumber,
             TowDriverLocation towDriverLocation,
-            TowDriverStatus towDriverStatus
+            TowDriverStatus towDriverStatus,
+            TowDriverTowAssigned towDriverTowAssigned
         )
         {
             return new TowDriverCreatedEvent
@@ -68,7 +71,8 @@ namespace TowDriver.Domain
                     towDriverMedicalCertificate.GetExpirationDate(),
                     towDriverIdentificationNumber.GetValue(),
                     towDriverLocation?.GetValue(),
-                    towDriverStatus.GetValue()
+                    towDriverStatus.GetValue(),
+                    towDriverTowAssigned.GetValue()
                 )
             );
         }

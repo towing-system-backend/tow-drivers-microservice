@@ -6,7 +6,7 @@ namespace TowDriver.Domain
     {
         private readonly string _value;
 
-        private static readonly string[] ValidStatuses = { "Active", "Inactive" };
+        private static readonly string[] ValidStatuses = { "Active", "Inactive", "Occupied" };
 
         public TowDriverStatus(string value)
         {

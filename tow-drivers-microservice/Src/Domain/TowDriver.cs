@@ -13,6 +13,7 @@ namespace TowDriver.Domain
         private TowDriverIdentificationNumber _towDriverIdentificationNumber;
         private TowDriverLocation? _towDriverLocation;
         private TowDriverStatus _towDriverStatus;
+        private TowDriverTowAssigned _towAssigned;
 
         public TowDriver(TowDriverId towDriverId) : base(towDriverId)
         {
@@ -43,6 +44,8 @@ namespace TowDriver.Domain
         public TowDriverLocation? GetTowDriverLocation() => _towDriverLocation;
         public TowDriverStatus GetTowDriverStatus() => _towDriverStatus;
 
+        public TowDriverTowAssigned GetTowDriverTowAssigned() => _towAssigned;
+
         public static TowDriver Create(
             TowDriverId towDriverId,
             SupplierCompanyId supplierCompanyId,
@@ -53,6 +56,7 @@ namespace TowDriver.Domain
             TowDriverIdentificationNumber towDriverIdentificationNumber,
             TowDriverLocation towDriverLocation,
             TowDriverStatus towDriverStatus,
+            TowDriverTowAssigned towAssigned,
             bool fromPersistence = false)
         {
             if (fromPersistence)
@@ -68,6 +72,7 @@ namespace TowDriver.Domain
                     _towDriverIdentificationNumber = towDriverIdentificationNumber,
                     _towDriverLocation = towDriverLocation,
                     _towDriverStatus = towDriverStatus,
+                    _towAssigned = towAssigned,
                 };
             }
 
@@ -82,7 +87,8 @@ namespace TowDriver.Domain
                     towDriverMedicalCertificate,
                     towDriverIdentificationNumber,
                     towDriverLocation,
-                    towDriverStatus
+                    towDriverStatus,
+                    towAssigned
                 )
             );
             return towDriver;
@@ -128,6 +134,11 @@ namespace TowDriver.Domain
             Apply(TowDriverStatusUpdated.CreateEvent(Id, towDriverStatus));
         }
 
+        public void UpdateDriverTowAssigned(TowDriverTowAssigned towDriverTowAssigned) 
+        {
+            Apply(TowDriverTowAssignedUpdated.CreateEvent(Id, towDriverTowAssigned));
+        }
+
         private void OnTowDriverCreatedEvent(TowDriverCreated context)
         {
             Id = new TowDriverId(context.TowDriverId);
@@ -148,6 +159,7 @@ namespace TowDriver.Domain
             _towDriverIdentificationNumber = new TowDriverIdentificationNumber(context.TowDriverIdentificationNumber);
             _towDriverLocation = new TowDriverLocation(context.TowDriverLocation!);
             _towDriverStatus = new TowDriverStatus(context.TowDriverStatus);
+            _towAssigned = new TowDriverTowAssigned(context.TowDriverTowAssigned);
         }
 
         private void OnTowDriverNameUpdatedEvent(TowDriverNameUpdated context)
@@ -192,6 +204,16 @@ namespace TowDriver.Domain
         private void OnTowDriverStatusUpdatedEvent(TowDriverStatusUpdated context)
         {
             _towDriverStatus = new TowDriverStatus(context.TowDriverStatus);
+        }
+
+        private void OnTowDriverTowAssignedUpdatedEvent(TowDriverTowAssignedUpdated context) 
+        {
+            _towAssigned = new TowDriverTowAssigned(context.TowDriverTowAssigned);
+        }
+
+        private void OnSupplierCompanyIdUpdatedEvent(SupplierCompanyIdUpdated context) 
+        {
+            _supplierCompanyId = new SupplierCompanyId(context.SupplierCompanyId);
         }
     }
 }

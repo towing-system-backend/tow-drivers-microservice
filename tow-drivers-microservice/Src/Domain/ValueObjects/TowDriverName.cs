@@ -8,7 +8,7 @@ namespace TowDriver.Domain
 
         public TowDriverName(string value)
         {
-            if (value.Length < 2 || value.Length > 15)
+            if (value.Length < 2 || value.Length > 64)
             {
                 throw new InvalidTowDriverNameException();
             }

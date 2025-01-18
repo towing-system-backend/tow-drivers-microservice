@@ -36,7 +36,8 @@ namespace TowDriver.Infrastructure
                     towDriver.MedicalCertificateExpirationDate,
                     towDriver.IdentificationNumber,
                     towDriver.Location!,
-                    towDriver.Status!
+                    towDriver.Status!,
+                    towDriver.TowAssigned
                 )
             ).ToList();
 

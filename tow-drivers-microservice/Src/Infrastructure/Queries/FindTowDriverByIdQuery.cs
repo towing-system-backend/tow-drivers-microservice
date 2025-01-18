@@ -1,30 +1,29 @@
 ﻿using Application.Core;
 using MongoDB.Driver;
 using TowDriver.Application;
-using TowDriver.Domain;
 
 namespace TowDriver.Infrastructure
 {
-    public class FindTowDriverByEmailQuery : IService<FindTowDriverByEmailDto, FindTowDriverByEmailResponse>
+    public class FindTowDriverByIdQuery : IService<FindTowDriverByIdDto, FindTowDriverByIdResponse>
     {
         private readonly IMongoCollection<MongoTowDriver> _towDriverCollection;
 
-        public FindTowDriverByEmailQuery()
+        public FindTowDriverByIdQuery()
         {
             MongoClient client = new MongoClient(Environment.GetEnvironmentVariable("CONNECTION_URI_READ_MODELS"));
             IMongoDatabase database = client.GetDatabase(Environment.GetEnvironmentVariable("DATABASE_NAME_READ_MODELS"));
             _towDriverCollection = database.GetCollection<MongoTowDriver>("tow-drivers");
         }
 
-        public async Task<Result<FindTowDriverByEmailResponse>> Execute(FindTowDriverByEmailDto query)
+        public async Task<Result<FindTowDriverByIdResponse>> Execute(FindTowDriverByIdDto query)
         {
-            var filter = Builders<MongoTowDriver>.Filter.Eq(towDriver => towDriver.Email, query.Email);
+            var filter = Builders<MongoTowDriver>.Filter.Eq(towDriver => towDriver.TowDriverId, query.Id);
             var res = await _towDriverCollection.Find(filter).FirstOrDefaultAsync();
 
-            if (res == null) return Result<FindTowDriverByEmailResponse>.MakeError(new TowDriversNotFound());
+            if (res == null) return Result<FindTowDriverByIdResponse>.MakeError(new TowDriversNotFound());
 
-            return Result<FindTowDriverByEmailResponse>.MakeSuccess(
-                new FindTowDriverByEmailResponse(
+            return Result<FindTowDriverByIdResponse>.MakeSuccess(
+                new FindTowDriverByIdResponse(
                     res.TowDriverId,
                     res.Name,
                     res.Email,

@@ -41,6 +41,7 @@ namespace TowDriver.Infrastructure
                 new TowDriverIdentificationNumber(res.IdentificationNumber),
                 new TowDriverLocation(res.Location!),
                 new TowDriverStatus(res.Status!),
+                new TowDriverTowAssigned(res.TowAssigned!),
                 true
             ));
         }
@@ -72,6 +73,7 @@ namespace TowDriver.Infrastructure
                 new TowDriverIdentificationNumber(res.IdentificationNumber),
                 new TowDriverLocation(res.Location!),
                 new TowDriverStatus(res.Status!),
+                new TowDriverTowAssigned(res.TowAssigned!),
                 true
             ));
         }
@@ -100,7 +102,8 @@ namespace TowDriver.Infrastructure
                 .Set(driver => driver.MedicalCertificateExpirationDate, towDriver.GetTowDriverMedicalCertificate().GetExpirationDate())
                 .Set(driver => driver.IdentificationNumber, towDriver.GetTowDriverIdentificationNumber().GetValue())
                 .Set(driver => driver.Location, towDriver.GetTowDriverLocation()?.GetValue())
-                .Set(driver => driver.Status, towDriver.GetTowDriverStatus()?.GetValue());
+                .Set(driver => driver.Status, towDriver.GetTowDriverStatus().GetValue())
+                .Set(driver => driver.TowAssigned, towDriver.GetTowDriverTowAssigned().GetValue());
 
             await _towDriverCollection.UpdateOneAsync(filter, update, new UpdateOptions { IsUpsert = true });
         }

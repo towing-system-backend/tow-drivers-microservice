@@ -10,7 +10,7 @@ namespace TowDriver.Domain
 
         public TowDriverDrivingLicense(string ownerName, DateOnly issueDate, DateOnly expirationDate)
         {
-            if (string.IsNullOrWhiteSpace(ownerName) || ownerName.Length < 2 || ownerName.Length > 15)
+            if (string.IsNullOrWhiteSpace(ownerName) || ownerName.Length < 2 || ownerName.Length > 64)
             {
                 throw new InvalidTowDriverNameException();
             }
