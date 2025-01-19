@@ -11,9 +11,9 @@ namespace TowDriver.Domain
         public static SupplierCompanyIdUpdatedEvent CreateEvent(TowDriverId publisherId, SupplierCompanyId supplierCompanyId)
         {
             return new SupplierCompanyIdUpdatedEvent(
-                    publisherId.GetValue(),
-                    typeof(SupplierCompanyIdUpdated).Name,
-                    new SupplierCompanyIdUpdated(
+                publisherId.GetValue(),
+                typeof(SupplierCompanyIdUpdated).Name,
+                new SupplierCompanyIdUpdated(
                     supplierCompanyId.GetValue()
                 )
             );

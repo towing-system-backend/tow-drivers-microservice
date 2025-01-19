@@ -83,7 +83,13 @@ namespace TowDriver.Infrastructure
         }
 
         public async Task Save(Domain.TowDriver towDriver)
-        { 
+        {
+            Console.Write($"ESte es el nombreee: {towDriver.GetTowDriverName().GetValue()}");
+            Console.Write($"ESte es el correo: {towDriver.GetTowDriverEmail().GetValue()}");
+
+
+
+
             var filter = Builders<MongoTowDriver>.Filter
                 .Eq(driver => driver.TowDriverId, towDriver.GetTowDriverId().GetValue());
 

@@ -51,8 +51,8 @@ namespace TowDriver.Application
             await _towDriverRepository.Save(towDriver);
             await _eventStore.AppendEvents(events);
             await _messageBrokerService.Publish(events);
-
-            return Result<UpdateTowDriverResponse>.MakeSuccess(new UpdateTowDriverResponse(towDriver.GetTowDriverId().GetValue()));
+            
+            return Result<UpdateTowDriverResponse>.MakeSuccess(new UpdateTowDriverResponse(command.TowDriverId));
         }
     }
 }

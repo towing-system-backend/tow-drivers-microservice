@@ -150,6 +150,11 @@ namespace TowDriver.Domain
             _towDriverStatus = new TowDriverStatus(context.TowDriverStatus);
         }
 
+        private void OnSupplierCompanyIdUpdatedEvent(SupplierCompanyIdUpdated context)
+        {
+            _supplierCompanyId = new SupplierCompanyId(context.SupplierCompanyId);
+        }
+
         private void OnTowDriverNameUpdatedEvent(TowDriverNameUpdated context)
         {
             _towDriverName = new TowDriverName(context.TowDriverName);
