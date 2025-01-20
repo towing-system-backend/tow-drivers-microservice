@@ -25,6 +25,7 @@ namespace TowDriver.Infrastructure
         private readonly IPerformanceLogsRepository _performanceLogsRepository = performanceLogsRepository;
 
         [ApiExplorerSettings(IgnoreApi = false)]
+        [HttpPost("create")]
         public async Task<ObjectResult> CreateTowDriver([FromBody] CreateTowDriverDto createTowDriverDto)
         {
             var command = new CreateTowDriverCommand(
@@ -171,6 +172,23 @@ namespace TowDriver.Infrastructure
             var query = new FindTowDriverByIdDto(Id);
             var handler = new  FindTowDriverByIdQuery();
             var res = await handler.Execute(query);
+
+            return Ok(res.Unwrap());
+        }
+
+        [HttpGet("find/TowDriversName")]
+        [Authorize(Roles = "Admin, TowDriver")]
+        public async Task<ObjectResult> FindTowDriversName()
+        {
+            var query =
+                new ExceptionCatcher<string, List<FindTowDriversNameResponse>>(
+                    new PerfomanceMonitor<string, List<FindTowDriversNameResponse>>(
+                        new LoggingAspect<string, List<FindTowDriversNameResponse>>(
+                            new FindTowDriversNameQuery(), _logger
+                        ), _logger, _performanceLogsRepository, nameof(FindTowDriversNameQuery), "Read"
+                    ), ExceptionParser.Parse
+                );
+            var res = await query.Execute("");
 
             return Ok(res.Unwrap());
         }
