@@ -12,19 +12,22 @@ namespace TowDriver.Tests
         private readonly Mock<IMessageBrokerService> _messageBrokerServiceMock;
         private readonly Mock<IEventStore> _eventStoreMock;
         private readonly Mock<ITowDriverRepository> _towDriverRepositoryMock;
+        private readonly Mock<ISupplierCompanyRespository> _supplierCompanyRespository;
         private readonly CreateTowDriverCommandHandler _createTowDriverCommandHandler;
-
+        
         public CreateTowDriverCommandHandlerTests()
         {
             _idServiceMock = new Mock<IdService<string>>();
             _messageBrokerServiceMock = new Mock<IMessageBrokerService>();
             _eventStoreMock = new Mock<IEventStore>();
             _towDriverRepositoryMock = new Mock<ITowDriverRepository>();
+            _supplierCompanyRespository = new Mock<ISupplierCompanyRespository>();
             _createTowDriverCommandHandler = new CreateTowDriverCommandHandler(
                 _idServiceMock.Object,
                 _messageBrokerServiceMock.Object,
                 _eventStoreMock.Object,
-                _towDriverRepositoryMock.Object
+                _towDriverRepositoryMock.Object,
+                _supplierCompanyRespository.Object
             );
         }
 

@@ -8,13 +8,15 @@ namespace TowDriver.Application
         IdService<string> idService,
         IMessageBrokerService messageBrokerService,
         IEventStore eventStore,
-        ITowDriverRepository towDriverRepository
+        ITowDriverRepository towDriverRepository,
+        ISupplierCompanyRespository supplierCompanyRespository
     ) : IService<CreateTowDriverCommand, CreateTowDriverResponse>
     {
         private readonly IdService<string> _idService = idService;
         private readonly IMessageBrokerService _messageBrokerService = messageBrokerService;
         private readonly IEventStore _eventStore =  eventStore;
         private readonly ITowDriverRepository _towDriverRepository = towDriverRepository;
+        private readonly ISupplierCompanyRespository _supplierCompanyRespository = supplierCompanyRespository;
         public async Task<Result<CreateTowDriverResponse>> Execute(CreateTowDriverCommand command)
         {
             var towDriverRegistered = await _towDriverRepository.FindByEmail(command.TowDriverEmail);
@@ -46,6 +48,7 @@ namespace TowDriver.Application
 
             var events = towDriver.PullEvents();
             await _towDriverRepository.Save(towDriver);
+            await _supplierCompanyRespository.SaveTowDriver(towDriver);
             await _eventStore.AppendEvents(events);
             await _messageBrokerService.Publish(events);
 

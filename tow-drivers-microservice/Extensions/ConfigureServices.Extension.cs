@@ -16,6 +16,7 @@ namespace TowDriver.Extensions
             services.AddScoped<Logger, DotNetLogger>();
             services.AddScoped<IMessageBrokerService, RabbitMQService>();
             services.AddScoped<TowDriverController>();
+            services.AddScoped<ISupplierCompanyRespository, MongoSupplierCompaniesRespository>();
             services.AddSingleton<MongoEventStore>();
             services.AddSingleton<IEventStore, MongoEventStore>();
             services.AddSingleton<IPerformanceLogsRepository, MongoPerformanceLogsRespository>();

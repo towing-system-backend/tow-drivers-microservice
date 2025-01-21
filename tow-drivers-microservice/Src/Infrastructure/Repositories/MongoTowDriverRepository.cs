@@ -1,19 +1,21 @@
 ﻿using MongoDB.Driver;
-using TowDriver.Domain;
+using Order.Infrastructure;
 using IOptional = Application.Core.Optional<TowDriver.Domain.TowDriver>;
 
 namespace TowDriver.Infrastructure
 {
+    using TowDriver.Domain;
     public class MongoTowDriverRepository : ITowDriverRepository
     {
         private readonly IMongoCollection<MongoTowDriver> _towDriverCollection;
+
         public MongoTowDriverRepository()
         {
-            MongoClient client = new MongoClient(Environment.GetEnvironmentVariable("CONNECTION_URI"));
+            var client = new MongoClient(Environment.GetEnvironmentVariable("CONNECTION_URI"));
             IMongoDatabase database = client.GetDatabase(Environment.GetEnvironmentVariable("DATABASE_NAME"));
             _towDriverCollection = database.GetCollection<MongoTowDriver>("tow-drivers");
         }
-        
+
         public async Task<IOptional> FindByEmail(string email)
         {
             var filter = Builders<MongoTowDriver>.Filter.Eq(towDriver => towDriver.Email, email);
@@ -78,14 +80,8 @@ namespace TowDriver.Infrastructure
             ));
         }
 
-        public async Task Remove(string towDriverId)
+        public async Task Save(TowDriver towDriver)
         {
-            var filter = Builders<MongoTowDriver>.Filter.Eq(driver => driver.TowDriverId, towDriverId);
-            var result = await _towDriverCollection.DeleteOneAsync(filter);
-        }
-
-        public async Task Save(Domain.TowDriver towDriver)
-        { 
             var filter = Builders<MongoTowDriver>.Filter
                 .Eq(driver => driver.TowDriverId, towDriver.GetTowDriverId().GetValue());
 
@@ -106,6 +102,7 @@ namespace TowDriver.Infrastructure
                 .Set(driver => driver.TowAssigned, towDriver.GetTowDriverTowAssigned().GetValue());
 
             await _towDriverCollection.UpdateOneAsync(filter, update, new UpdateOptions { IsUpsert = true });
+
         }
     }
 }

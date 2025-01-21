@@ -14,8 +14,9 @@ namespace TowDriver.Infrastructure
         IMessageBrokerService messageBrokerService,
         IEventStore eventStore,
         ITowDriverRepository towDriverRepository,
-        IPerformanceLogsRepository performanceLogsRepository
-    ): ControllerBase
+        IPerformanceLogsRepository performanceLogsRepository,
+        ISupplierCompanyRespository supplierCompanyRespository
+    ) : ControllerBase
     {
         private readonly IdService<string> _idService = idService;
         private readonly Logger _logger = logger;
@@ -23,6 +24,7 @@ namespace TowDriver.Infrastructure
         private readonly IEventStore _eventStore = eventStore;
         private readonly ITowDriverRepository _towDriverRepository = towDriverRepository;
         private readonly IPerformanceLogsRepository _performanceLogsRepository = performanceLogsRepository;
+        private readonly ISupplierCompanyRespository _supplierCompanyRespository = supplierCompanyRespository;
 
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpPost("create")]
@@ -47,7 +49,7 @@ namespace TowDriver.Infrastructure
                 new ExceptionCatcher<CreateTowDriverCommand, CreateTowDriverResponse>(
                     new PerfomanceMonitor<CreateTowDriverCommand, CreateTowDriverResponse>(
                         new LoggingAspect<CreateTowDriverCommand, CreateTowDriverResponse>(
-                            new CreateTowDriverCommandHandler(_idService, _messageBrokerService, _eventStore, _towDriverRepository), _logger
+                            new CreateTowDriverCommandHandler(_idService, _messageBrokerService, _eventStore, _towDriverRepository, _supplierCompanyRespository), _logger
                         ), _logger, _performanceLogsRepository, nameof(CreateTowDriverCommandHandler), "Write"
                     ), ExceptionParser.Parse
                 );
